@@ -9,7 +9,7 @@ A cinematic portfolio for AI filmmaking and digital art, built on a restrained d
 - Self-hosted Cormorant Garamond and Manrope fonts
 - An obsidian, graphite, ivory, and muted bronze design system
 
-The site renders static HTML to `dist/` and preserves the existing Cloudflare Workers deployment integration. No API keys, backend services, Cloudflare adapter, or runtime rendering are required. The live deployment configuration is managed outside this checkout; this change does not introduce or alter it.
+The site renders static HTML to `dist/` and deploys as static assets to the existing `forge-portfolio` Cloudflare Worker. No API keys, backend services, Cloudflare adapter, or runtime rendering are required to develop and build the site. Deployment configuration lives in `wrangler.jsonc`; Cloudflare authentication is supplied separately by the connected build platform or your authenticated Wrangler session.
 
 ## Local development
 
@@ -52,7 +52,7 @@ npx playwright install chromium
 
 On Linux, use `npx playwright install --with-deps chromium` if system browser libraries are missing and your environment permits installing them. An existing compatible Chromium can be used with `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:e2e`. The browser suite serves the existing `dist/` output with its own local static server on port `4173`, so build first. Set `PORTFOLIO_TEST_PORT` if that port is occupied. `npm run test` is an alias for the unit suite.
 
-GitHub Actions runs type checks, unit tests, the production build, and Chromium browser tests for pull requests and pushes to `main`. Failed browser runs upload their traces for investigation.
+GitHub Actions runs type checks, unit tests, the production build, Wrangler deployment validation, and Chromium browser tests for pull requests and pushes to `main`. Failed browser runs upload their traces for investigation.
 
 ## Pages and customization
 
@@ -123,7 +123,17 @@ Run the validation and test commands after editing content. A successful build g
 
 ## Deployment compatibility
 
-Keep the existing Cloudflare Workers build integration using `npm run build` and `dist/`. There is no deployment configuration file to edit in this checkout. Continue managing the live deployment through its current Cloudflare settings.
+Keep the existing Cloudflare Workers build integration using `npm run build` and `dist/`. The repository pins Wrangler 4.149.0 and defines the existing Worker name `forge-portfolio`, compatibility date `2026-10-06`, and static assets directory `./dist` in `wrangler.jsonc`. The date matches Wrangler's bundled runtime. There is no Worker JavaScript entry point or Astro adapter because every page is statically generated.
+
+The top-level `previews: {}` enables the connected Cloudflare build's `npx wrangler preview` command. Preview deployments use the same static assets configuration; production remains compatible with `npx wrangler deploy`. Keep account credentials, custom domains, and platform build settings in Cloudflare rather than committing them.
+
+After `npm run build`, validate production deployment packaging without publishing:
+
+```sh
+npx wrangler deploy --dry-run
+```
+
+With Cloudflare authentication, deploy using `npx wrangler deploy` for production or `npx wrangler preview` for a preview. Wrangler preview has no dry-run option and creates a preview deployment. The Astro `npm run preview` command is a local server and does not deploy to Cloudflare.
 
 Cloudflare Pages is also a supported optional target with the following settings:
 
