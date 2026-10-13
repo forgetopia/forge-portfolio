@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100" fill="none">
+  <defs>
+    <linearGradient id="sky" x1="800" y1="0" x2="800" y2="1100" gradientUnits="userSpaceOnUse"><stop stop-color="#121715"/><stop offset=".53" stop-color="#252a25"/><stop offset=".72" stop-color="#71624b"/><stop offset="1" stop-color="#101412"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#c4af7d" stop-opacity=".38"/><stop offset="1" stop-color="#b69d65" stop-opacity="0"/></radialGradient>
+    <linearGradient id="orb" x1="898" y1="225" x2="1305" y2="665" gradientUnits="userSpaceOnUse"><stop stop-color="#ede0b6"/><stop offset=".08" stop-color="#a89065"/><stop offset=".45" stop-color="#5c5140"/><stop offset=".8" stop-color="#222923"/><stop offset="1" stop-color="#121916"/></linearGradient>
+    <linearGradient id="land" x1="800" y1="690" x2="800" y2="1100" gradientUnits="userSpaceOnUse"><stop stop-color="#343a30"/><stop offset="1" stop-color="#090e0c"/></linearGradient>
+    <filter id="texture"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="3" seed="19" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".055"/></feComponentTransfer><feBlend in="SourceGraphic" mode="soft-light"/></filter>
+  </defs>
+  <g filter="url(#texture)">
+    <path fill="url(#sky)" d="M0 0h1600v1100H0z"/>
+    <ellipse cx="1130" cy="540" rx="540" ry="480" fill="url(#glow)"/>
+    <circle cx="1100" cy="457" r="225" fill="url(#orb)"/>
+    <path d="M887 388a225 225 0 0 1 334-120" stroke="#ccb68a" stroke-opacity=".4"/>
+    <path d="m0 715 106-14 144 18 150-42 156 35 169-39 148 32 103-20 198 40 143-27 156 23 127-24v403H0z" fill="url(#land)"/>
+    <path d="m0 815 209-19 160 45 196-44 203 70 229-63 222 25 196-52 185 31v292H0z" fill="#101612"/>
+    <path d="m701 1100 245-150 210-87 244-51 200-24" stroke="#9f906d" stroke-opacity=".13" stroke-width="2"/>
+    <path d="m933 1100 153-112 215-93 299-68" stroke="#9f906d" stroke-opacity=".08"/>
+  </g>
+</svg>

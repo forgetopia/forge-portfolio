@@ -1,0 +1,22 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Arrow from '../components/Arrow.astro';
+import { site } from '../data/site';
+---
+
+<PageLayout title="Contact" eyebrow="03 / The conversation" description="A space for future collaborations, creative conversations, and new possibilities with FORGE." showInvitation={false}>
+  <Fragment slot="heading">Something extraordinary<br />starts with <em>an idea.</em></Fragment>
+  <Fragment slot="description">For creative collaborations, cinematic experiments,<br class="hidden sm:block" /> or an idea that deserves its own universe.</Fragment>
+  <section class="site-shell contact-section" aria-labelledby="contact-heading">
+    <div class="contact-panel">
+      <p class="eyebrow">The next chapter</p>
+      <h2 id="contact-heading">Let's start a <em>conversation.</em></h2>
+      {site.contactEmail ? (
+        <a class="contact-email text-link" href={`mailto:${site.contactEmail}`}>{site.contactEmail}<Arrow /></a>
+      ) : (
+        <div class="contact-coming-soon"><span class="status-dot"></span><p>A direct line is on its way.<br /><span>Contact details will be shared here soon.</span></p></div>
+      )}
+    </div>
+    <div class="contact-aside"><p class="eyebrow">In the meantime</p><p>Step inside the creative territories and discover the vision behind FORGE.</p><a href="/work/" class="text-link">Explore the universe <Arrow /></a></div>
+  </section>
+</PageLayout>

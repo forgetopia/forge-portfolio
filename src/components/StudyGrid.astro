@@ -1,0 +1,20 @@
+---
+import { disciplines } from '../data/site';
+---
+
+<div class="study-grid">
+  {disciplines.map((discipline) => (
+    <article class="study-card">
+      <div class:list={['study-image', discipline.imageClass]}>
+        <img src={discipline.image} alt="" width="1200" height="900" loading="lazy" decoding="async" />
+        <span class="study-number">F / {discipline.number}</span>
+        <span class="study-status">Visual placeholder</span>
+      </div>
+      <div class="study-caption">
+        <p class="eyebrow">{discipline.category}</p>
+        <h3>{discipline.name}</h3>
+        <p>{discipline.description}</p>
+      </div>
+    </article>
+  ))}
+</div>

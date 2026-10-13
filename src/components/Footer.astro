@@ -1,0 +1,29 @@
+---
+import Arrow from './Arrow.astro';
+import { navigation, site } from '../data/site';
+
+interface Props {
+  showInvitation?: boolean;
+}
+
+const { showInvitation = true } = Astro.props;
+---
+
+<footer class="site-footer">
+  {showInvitation && (
+    <div class="site-shell footer-invitation">
+      <div>
+        <p class="eyebrow">Every universe begins with an idea</p>
+        <h2>Let's make something <em>unreal.</em></h2>
+      </div>
+      <a class="round-link" href="/contact/" aria-label="Start a conversation"><Arrow /></a>
+    </div>
+  )}
+  <div class="site-shell footer-bottom">
+    <a class="footer-brand" href="/" aria-label="FORGE — Home">{site.name}<span> / {site.tagline}</span></a>
+    <nav aria-label="Footer navigation">
+      {navigation.map(({ label, href }) => <a href={href}>{label}</a>)}
+    </nav>
+    <p>© {new Date().getFullYear()} FORGE</p>
+  </div>
+</footer>

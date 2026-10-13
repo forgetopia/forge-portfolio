@@ -1,0 +1,27 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Arrow from '../components/Arrow.astro';
+---
+
+<PageLayout title="About" eyebrow="02 / The perspective" description="Meet FORGE, an independent creative practice at the intersection of human imagination and AI filmmaking.">
+  <Fragment slot="heading">Human imagination.<br /><em>New possibilities.</em></Fragment>
+  <Fragment slot="description">FORGE is an independent visual universe.<br class="hidden sm:block" /> Built on curiosity. Shaped by imagination.</Fragment>
+  <section class="site-shell about-section" aria-labelledby="philosophy-heading">
+    <figure class="about-art"><img src="/art/form.svg" alt="An abstract bronze form illuminated against a dark background" width="1200" height="900" /><figcaption>Form study / Visual placeholder</figcaption></figure>
+    <div class="about-copy">
+      <p class="eyebrow">The philosophy</p>
+      <h2 id="philosophy-heading">The tools evolve.<br />The impulse to <em>create</em> stays.</h2>
+      <p>FORGE explores what happens when cinematic thinking meets emerging creative tools. Film, digital art, fantasy worlds, fashion, and surreal imagery are all part of the same conversation.</p>
+      <p>AI is part of the process. The intention is human: to find an atmosphere, evoke a feeling, and bring something unexpected into view.</p>
+      <a href="/work/" class="text-link">Explore the creative territories <Arrow /></a>
+    </div>
+  </section>
+  <section class="site-shell principles-section" aria-labelledby="principles-heading">
+    <h2 id="principles-heading" class="eyebrow">What guides the work</h2>
+    <div class="principles-grid">
+      <article><span class="eyebrow">01 / Intention</span><h3>Feeling first.</h3><p>Every image begins with the atmosphere it should create.</p></article>
+      <article><span class="eyebrow">02 / Curiosity</span><h3>Beyond the familiar.</h3><p>Follow an idea into places that don't exist yet.</p></article>
+      <article><span class="eyebrow">03 / Craft</span><h3>Consider every detail.</h3><p>From the first frame to the smallest texture, make it matter.</p></article>
+    </div>
+  </section>
+</PageLayout>
