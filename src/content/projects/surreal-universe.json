@@ -1,0 +1,21 @@
+{
+  "slug": "surreal-universe",
+  "title": "Surreal Universe",
+  "summary": "A sample entry demonstrating portrait media and the experimental and photography filters.",
+  "description": [
+    "This sample entry demonstrates the portrait project page structure for Surreal Universe. Original artwork and verified project information have not been supplied.",
+    "Surreal & Experimental and AI Photography are demonstration categories. The labeled portrait placeholder is a layout guide, not an original portfolio image."
+  ],
+  "categories": ["surreal-experimental", "ai-photography"],
+  "cover": {
+    "src": "/placeholders/portrait.svg",
+    "alt": "Clearly labeled portrait image placeholder; no artwork supplied for Surreal Universe.",
+    "width": 1000,
+    "height": 1400,
+    "orientation": "portrait",
+    "placeholder": true
+  },
+  "featured": true,
+  "order": 3,
+  "sample": true
+}

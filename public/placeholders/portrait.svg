@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1400" viewBox="0 0 1000 1400" role="img" aria-labelledby="title description">
+  <title id="title">Portrait image placeholder</title>
+  <desc id="description">A plain graphite wireframe with an explicit placeholder label. No original artwork.</desc>
+  <rect width="1000" height="1400" fill="#1c1d1b"/>
+  <g fill="none" stroke="#ece9e0" stroke-opacity=".12" stroke-width="2">
+    <rect x="64" y="64" width="872" height="1272"/>
+    <path d="M64 64 936 1336M936 64 64 1336"/>
+  </g>
+  <rect x="130" y="610" width="740" height="180" fill="#1c1d1b"/>
+  <g fill="#b2a083" font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="500" y="674" font-size="32" letter-spacing="8">IMAGE PLACEHOLDER</text>
+    <text x="500" y="738" font-size="20" letter-spacing="4">PORTRAIT · 1000 × 1400</text>
+  </g>
+</svg>

@@ -1,7 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Arrow from '../components/Arrow.astro';
-import StudyGrid from '../components/StudyGrid.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import CollectionNotice from '../components/CollectionNotice.astro';
+import { getFeaturedProjects, getProjects } from '../lib/projects';
+
+const featuredProjects = getFeaturedProjects(await getProjects());
 ---
 
 <BaseLayout>
@@ -29,12 +33,12 @@ import StudyGrid from '../components/StudyGrid.astro';
       </div>
     </div>
   </section>
-  <section class="site-shell universe-section" aria-labelledby="universe-heading">
+  {featuredProjects.length > 0 && <section class="site-shell universe-section" aria-labelledby="universe-heading" data-featured-projects>
     <div class="section-heading">
-      <div><p class="eyebrow">02 / Creative territories</p><h2 id="universe-heading">One vision. <em>Infinite possibilities.</em></h2></div>
-      <a class="text-link" href="/work/">Discover the work <Arrow /></a>
+      <div><p class="eyebrow">02 / Featured works</p><h2 id="universe-heading">One vision. <em>Infinite possibilities.</em></h2></div>
+      <a class="text-link" href="/work/">View all works <Arrow /></a>
     </div>
-    <StudyGrid />
-    <p class="collection-note"><span class="status-dot"></span>The universe is taking shape. Original work coming soon.</p>
-  </section>
+    <div class="project-grid">{featuredProjects.map((project) => <ProjectCard project={project} />)}</div>
+    <CollectionNotice projects={featuredProjects} />
+  </section>}
 </BaseLayout>

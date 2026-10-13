@@ -1,0 +1,15 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+}
+
+const { projects } = Astro.props;
+const note = [
+  projects.some(({ data }) => data.sample) ? 'Sample projects are labeled.' : '',
+  projects.some(({ data }) => data.cover.placeholder) ? 'Placeholder images are marked.' : '',
+].filter(Boolean).join(' ');
+---
+
+{note && <p class="collection-note"><span class="status-dot"></span>{note}</p>}

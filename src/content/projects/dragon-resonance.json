@@ -1,0 +1,21 @@
+{
+  "slug": "dragon-resonance",
+  "title": "Dragon Resonance",
+  "summary": "A sample project record for the Action & Combat and Fantasy Live-Action filters.",
+  "description": [
+    "This sample entry demonstrates the project page structure for Dragon Resonance. Original artwork and verified project information have not been supplied.",
+    "The selected categories illustrate the gallery's filtering behavior. Replace this description and the placeholder image with approved project material."
+  ],
+  "categories": ["action-combat", "fantasy-live-action"],
+  "cover": {
+    "src": "/placeholders/landscape.svg",
+    "alt": "Clearly labeled landscape image placeholder; no artwork supplied for Dragon Resonance.",
+    "width": 1600,
+    "height": 1000,
+    "orientation": "landscape",
+    "placeholder": true
+  },
+  "featured": false,
+  "order": 4,
+  "sample": true
+}

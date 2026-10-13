@@ -1,0 +1,21 @@
+{
+  "slug": "the-last-rune-engine",
+  "title": "The Last Rune Engine",
+  "summary": "A sample record demonstrating how a project can belong to more than one category.",
+  "description": [
+    "This sample entry demonstrates the project page structure for The Last Rune Engine. Original artwork and verified project information have not been supplied.",
+    "AI Films and Fantasy Live-Action are demonstration categories for testing the gallery. No production, story, or credit details are asserted by this sample."
+  ],
+  "categories": ["ai-films", "fantasy-live-action"],
+  "cover": {
+    "src": "/placeholders/portrait.svg",
+    "alt": "Clearly labeled portrait image placeholder; no artwork supplied for The Last Rune Engine.",
+    "width": 1000,
+    "height": 1400,
+    "orientation": "portrait",
+    "placeholder": true
+  },
+  "featured": true,
+  "order": 2,
+  "sample": true
+}
