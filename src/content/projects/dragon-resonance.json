@@ -6,7 +6,10 @@
     "This sample entry demonstrates the project page structure for Dragon Resonance. Original artwork and verified project information have not been supplied.",
     "The selected categories illustrate the gallery's filtering behavior. Replace this description and the placeholder image with approved project material."
   ],
-  "categories": ["action-combat", "fantasy-live-action"],
+  "categories": [
+    "action-combat",
+    "fantasy-live-action"
+  ],
   "cover": {
     "src": "/placeholders/landscape.svg",
     "alt": "Clearly labeled landscape image placeholder; no artwork supplied for Dragon Resonance.",
@@ -17,5 +20,74 @@
   },
   "featured": false,
   "order": 4,
-  "sample": true
+  "sample": true,
+  "synopsis": "Sample synopsis for Dragon Resonance. This entry demonstrates the cinematic project viewer; an approved synopsis and original project media have not been supplied.",
+  "creativeDirection": [
+    "Sample creative-direction field. Approved visual references and production intent are awaiting confirmation.",
+    "The neutral test clip and labeled stills demonstrate media presentation only; they do not represent original project artwork or footage."
+  ],
+  "credits": [],
+  "video": {
+    "src": "/media/placeholder-landscape.mp4",
+    "type": "video/mp4",
+    "width": 1280,
+    "height": 800,
+    "orientation": "landscape",
+    "placeholder": true,
+    "hasAudio": false,
+    "captions": [
+      {
+        "src": "/media/placeholder-en.vtt",
+        "srclang": "en",
+        "label": "English"
+      }
+    ],
+    "transcript": "A silent graphite test pattern labeled PLACEHOLDER CLIP and NO ORIGINAL FOOTAGE. A small bronze marker moves along the bottom. No original project footage has been supplied."
+  },
+  "previewVideo": {
+    "src": "/media/placeholder-landscape.mp4",
+    "type": "video/mp4",
+    "width": 1280,
+    "height": 800,
+    "orientation": "landscape",
+    "placeholder": true,
+    "hasAudio": false,
+    "captions": [
+      {
+        "src": "/media/placeholder-en.vtt",
+        "srclang": "en",
+        "label": "English"
+      }
+    ],
+    "transcript": "A silent graphite test pattern labeled PLACEHOLDER CLIP and NO ORIGINAL FOOTAGE. A small bronze marker moves along the bottom. No original project footage has been supplied."
+  },
+  "stills": [
+    {
+      "src": "/placeholders/landscape.svg",
+      "alt": "Clearly labeled landscape placeholder for Dragon Resonance, frame 01; no original still supplied.",
+      "width": 1600,
+      "height": 1000,
+      "orientation": "landscape",
+      "placeholder": true,
+      "caption": "Placeholder frame 01 — awaiting approved imagery."
+    },
+    {
+      "src": "/placeholders/portrait.svg",
+      "alt": "Clearly labeled portrait placeholder for Dragon Resonance, frame 02; no original still supplied.",
+      "width": 1000,
+      "height": 1400,
+      "orientation": "portrait",
+      "placeholder": true,
+      "caption": "Placeholder frame 02 — awaiting approved imagery."
+    },
+    {
+      "src": "/placeholders/landscape.svg",
+      "alt": "Clearly labeled landscape placeholder for Dragon Resonance, frame 03; no original still supplied.",
+      "width": 1600,
+      "height": 1000,
+      "orientation": "landscape",
+      "placeholder": true,
+      "caption": "Placeholder frame 03 — awaiting approved imagery."
+    }
+  ]
 }

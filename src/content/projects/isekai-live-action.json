@@ -6,7 +6,10 @@
     "This sample entry demonstrates the project page structure for Isekai Live-Action. Original artwork and verified project information have not been supplied.",
     "The title is included as requested sample content. Its AI Films and Fantasy Live-Action categories are illustrative rather than claims about a finished production."
   ],
-  "categories": ["fantasy-live-action", "ai-films"],
+  "categories": [
+    "fantasy-live-action",
+    "ai-films"
+  ],
   "cover": {
     "src": "/placeholders/landscape.svg",
     "alt": "Clearly labeled landscape image placeholder; no artwork supplied for Isekai Live-Action.",
@@ -17,5 +20,74 @@
   },
   "featured": false,
   "order": 5,
-  "sample": true
+  "sample": true,
+  "synopsis": "Sample synopsis for Isekai Live-Action. This entry demonstrates the cinematic project viewer; an approved synopsis and original project media have not been supplied.",
+  "creativeDirection": [
+    "Sample creative-direction field. Approved visual references and production intent are awaiting confirmation.",
+    "The neutral test clip and labeled stills demonstrate media presentation only; they do not represent original project artwork or footage."
+  ],
+  "credits": [],
+  "video": {
+    "src": "/media/placeholder-landscape.mp4",
+    "type": "video/mp4",
+    "width": 1280,
+    "height": 800,
+    "orientation": "landscape",
+    "placeholder": true,
+    "hasAudio": false,
+    "captions": [
+      {
+        "src": "/media/placeholder-en.vtt",
+        "srclang": "en",
+        "label": "English"
+      }
+    ],
+    "transcript": "A silent graphite test pattern labeled PLACEHOLDER CLIP and NO ORIGINAL FOOTAGE. A small bronze marker moves along the bottom. No original project footage has been supplied."
+  },
+  "previewVideo": {
+    "src": "/media/placeholder-landscape.mp4",
+    "type": "video/mp4",
+    "width": 1280,
+    "height": 800,
+    "orientation": "landscape",
+    "placeholder": true,
+    "hasAudio": false,
+    "captions": [
+      {
+        "src": "/media/placeholder-en.vtt",
+        "srclang": "en",
+        "label": "English"
+      }
+    ],
+    "transcript": "A silent graphite test pattern labeled PLACEHOLDER CLIP and NO ORIGINAL FOOTAGE. A small bronze marker moves along the bottom. No original project footage has been supplied."
+  },
+  "stills": [
+    {
+      "src": "/placeholders/landscape.svg",
+      "alt": "Clearly labeled landscape placeholder for Isekai Live-Action, frame 01; no original still supplied.",
+      "width": 1600,
+      "height": 1000,
+      "orientation": "landscape",
+      "placeholder": true,
+      "caption": "Placeholder frame 01 — awaiting approved imagery."
+    },
+    {
+      "src": "/placeholders/portrait.svg",
+      "alt": "Clearly labeled portrait placeholder for Isekai Live-Action, frame 02; no original still supplied.",
+      "width": 1000,
+      "height": 1400,
+      "orientation": "portrait",
+      "placeholder": true,
+      "caption": "Placeholder frame 02 — awaiting approved imagery."
+    },
+    {
+      "src": "/placeholders/landscape.svg",
+      "alt": "Clearly labeled landscape placeholder for Isekai Live-Action, frame 03; no original still supplied.",
+      "width": 1600,
+      "height": 1000,
+      "orientation": "landscape",
+      "placeholder": true,
+      "caption": "Placeholder frame 03 — awaiting approved imagery."
+    }
+  ]
 }

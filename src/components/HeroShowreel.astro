@@ -1,0 +1,67 @@
+---
+import { showreel } from '../data/showreel';
+import '../styles/showreel.css';
+
+const { poster, video, autoplay } = showreel;
+---
+
+<section
+  class="hero hero-showreel"
+  aria-labelledby="hero-heading"
+  data-hero-showreel
+  data-autoplay={String(autoplay)}
+  data-playback="idle"
+  data-video-visible="false"
+>
+  <div class="hero-art" aria-hidden="true">
+    <img src={poster.src} alt="" width={poster.width} height={poster.height} fetchpriority="high" decoding="async" />
+    <video
+      class="hero-video"
+      id="hero-showreel-video"
+      data-hero-video
+      data-src={video.src}
+      data-type={video.type}
+      width={video.width}
+      height={video.height}
+      preload="none"
+      muted
+      loop
+      playsinline
+      tabindex="-1"
+    >
+      {video.captions.map((caption, index) => <track kind="captions" data-src={caption.src} srclang={caption.srclang} label={caption.label} default={video.hasAudio && index === 0} />)}
+    </video>
+  </div>
+  <div class="hero-vignette" aria-hidden="true"></div>
+  <slot />
+  <div class="hero-media-controls" data-hero-controls hidden>
+    <p class="hero-media-label">{video.placeholder ? 'Placeholder showreel' : 'Showreel'}{!video.hasAudio && <span> · Silent clip</span>}</p>
+    <div class="hero-media-buttons">
+      <button type="button" data-hero-play aria-label="Play showreel" aria-controls="hero-showreel-video">
+        <span class="hero-control-icon" aria-hidden="true" data-hero-play-icon>▶︎</span>
+        <span data-hero-play-label>Play</span>
+      </button>
+      <button type="button" data-hero-mute aria-label="Unmute showreel" aria-controls="hero-showreel-video">
+        <span class="hero-control-icon" aria-hidden="true">♪</span>
+        <span data-hero-mute-label>Unmute</span>
+      </button>
+    </div>
+    <p class="hero-media-status" role="status" aria-live="polite" aria-atomic="true" data-hero-status>Play on demand. Poster shown until playback begins.</p>
+    {video.transcript && <details class="hero-media-transcript">
+      <summary>{video.placeholder ? 'Placeholder clip description' : 'Showreel transcript'}</summary>
+      <p>{video.transcript}</p>
+    </details>}
+  </div>
+  <noscript>
+    <div class="hero-no-script">
+      <a href={video.src}>Open {video.placeholder ? 'placeholder ' : ''}showreel{!video.hasAudio && ' (silent clip)'}</a>
+      {video.transcript && <details class="hero-media-transcript"><summary>Clip description</summary><p>{video.transcript}</p></details>}
+    </div>
+  </noscript>
+</section>
+
+<script>
+  import { initHeroShowreels } from '../scripts/hero-showreel';
+
+  initHeroShowreels();
+</script>

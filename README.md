@@ -1,6 +1,6 @@
 # FORGE — Visual Universe
 
-A cinematic portfolio for AI filmmaking and digital art, built on a restrained dark design system. Portfolio records drive a responsive gallery, category filters, featured homepage projects, and individual project pages.
+A cinematic portfolio for AI filmmaking and digital art, built on a restrained dark design system. Portfolio records drive a responsive gallery, category filters, featured homepage projects, and individual project pages with video, stills, and a fullscreen image viewer.
 
 ## Stack
 
@@ -29,8 +29,8 @@ Local development and preview servers normally run in the foreground; stop them 
 | `npm run dev` | Start the Astro development server |
 | `npm run check` | Run Astro and TypeScript diagnostics |
 | `npm run build` | Generate the production site in `dist/` |
-| `npm run test:unit` | Validate project schemas and portfolio content |
-| `npm run test:e2e` | Check the built site with Playwright |
+| `npm run test:unit` | Validate project schemas, media metadata, and portfolio content |
+| `npm run test:e2e` | Check the built site and media interactions with Playwright |
 | `npm run preview -- --host 0.0.0.0` | Preview the production build on port `4321` |
 
 Before opening a pull request, run:
@@ -58,15 +58,15 @@ GitHub Actions runs type checks, unit tests, the production build, Wrangler depl
 
 | Route | Content |
 | --- | --- |
-| `/` | Cinematic hero, featured portfolio projects, and studio introduction |
+| `/` | Cinematic showreel hero, featured portfolio projects, and studio introduction |
 | `/work/` | Responsive portfolio grid with eight category filter options |
-| `/work/[slug]/` | Statically generated project detail pages |
+| `/work/[slug]/` | Static project viewer with cover, video, synopsis, direction, credits, stills, and adjacent projects |
 | `/about/` | Studio identity and creative approach |
 | `/contact/` | Contact page prepared for real contact details |
 
 Shared page structure lives in `src/layouts/` and reusable interface elements in `src/components/`. Update the studio identity, site metadata, and contact configuration in `src/data/site.ts`. The global stylesheet defines the design tokens and shared visual treatments.
 
-The five demonstration records are **The Long Night**, **The Last Rune Engine**, **Dragon Resonance**, **Isekai Live-Action**, and **Surreal Universe**. These are explicitly labeled sample records with placeholder media; their text and categories demonstrate the content model and do not claim original artwork or completed productions. Gallery filters work in the browser, while all projects and detail links remain available without JavaScript. Video hover previews and fullscreen lightboxes are deferred to PR 03.
+The five demonstration records are **The Long Night**, **The Last Rune Engine**, **Dragon Resonance**, **Isekai Live-Action**, and **Surreal Universe**. These are explicitly labeled sample records with placeholder media; their text and categories demonstrate the content model and do not claim original artwork or completed productions. Gallery filters work in the browser, while all projects and detail links remain available without JavaScript.
 
 Contact information is deliberately unconfigured; supply real details before publishing a live contact channel.
 
@@ -115,11 +115,64 @@ Titles, summaries, image alternative text, and every description paragraph must 
 
 `featured: true` includes a project on the homepage. Projects are sorted by ascending nonnegative integer `order`, then by slug for consistent ordering. These fields default to `false` and `0` respectively when omitted.
 
-Use local cover paths under `public/placeholders/` or `public/images/` and reference them as `/placeholders/...` or `/images/...`. Set the actual positive integer dimensions: landscape covers must be wider than tall, and portrait covers taller than wide. The included portrait placeholder is `/placeholders/portrait.svg` at `1000 × 1400`; set `orientation` to `portrait` when using it. Project cards preserve both media formats.
+Use local image paths under `public/placeholders/`, `public/images/`, or `public/art/` and reference them as `/placeholders/...`, `/images/...`, or `/art/...`. Set the actual positive integer dimensions: landscape images must be wider than tall, and portrait images taller than wide. The included portrait placeholder is `/placeholders/portrait.svg` at `1000 × 1400`; set `orientation` to `portrait` when using it. Project cards and stills preserve both media formats. Images may also have an optional nonempty `caption`.
 
 Keep `sample: true` while a record contains demonstration text or unverified project details. Keep `cover.placeholder: true` for placeholder images and use alternative text that identifies them. Only change these flags after replacing their content with approved project information and supplied artwork. Never invent images, credits, clients, or production claims.
 
 Run the validation and test commands after editing content. A successful build generates the corresponding `/work/my-sample-project/` page automatically; no route file per project is needed.
+
+## Cinematic media
+
+The hero's media and optional autoplay flag live in `src/data/showreel.ts`. The default is `autoplay: false`: visitors choose when to play. Opt-in autoplay remains muted and is gated by reduced-motion, data-saving, and desktop pointer preferences. An accessible play/pause control and mute control accompany the hero; the committed demonstration clip has no audio. The existing high-resolution `/art/horizon.svg` is explicitly labeled as a poster placeholder until supplied showreel artwork is available.
+
+Project records may add the following fields without changing their route:
+
+| Field | Content |
+| --- | --- |
+| `video` | Main project video using the media metadata shown below |
+| `previewVideo` | Short muted card preview using the same metadata |
+| `synopsis` | Nonempty synopsis; existing description content remains available |
+| `creativeDirection` | Array of nonempty direction paragraphs |
+| `credits` | Array of `{ "role": "…", "name": "…" }` entries with verified information |
+| `stills` | Array using the same image metadata as `cover`, with optional captions |
+
+The schema defaults direction, credits, and stills to empty arrays. The sample credits remain empty because no verified production credits have been supplied. Missing video and still fields remain valid, so projects can be image-only.
+
+For example, merge this optional `video` field into a sample record:
+
+```json
+{
+  "video": {
+    "src": "/media/placeholder-landscape.mp4",
+    "type": "video/mp4",
+    "width": 1280,
+    "height": 800,
+    "orientation": "landscape",
+    "placeholder": true,
+    "hasAudio": false,
+    "captions": [
+      { "src": "/media/placeholder-en.vtt", "srclang": "en", "label": "English" }
+    ],
+    "transcript": "A silent test pattern labeled PLACEHOLDER CLIP and NO ORIGINAL FOOTAGE."
+  }
+}
+```
+
+Videos must be local `.mp4` or `.webm` files under `public/media/`; the MIME type must match the extension. Dimensions and orientation are validated as they are for images. Set `hasAudio: true` for audio-bearing footage and supply at least one caption track, stored as a local `.vtt` file under `public/media/`. Include accurate alternative text, captions, and a transcript describing meaningful visual content. Keep `placeholder: true` for demonstration footage.
+
+The committed five-second clips are generated neutral test patterns with burned-in **PLACEHOLDER CLIP / NO ORIGINAL FOOTAGE** labels. They contain no original artwork or audio. The landscape clip is `1280 × 800`; the portrait clip is `640 × 896`. Their shared English WebVTT track describes the test pattern. Builds need no FFmpeg because the assets are committed. To regenerate the clips during asset authoring, install FFmpeg with `libx264` and `drawtext`, then run:
+
+```sh
+bash scripts/generate-placeholder-media.sh
+```
+
+The helper uses a supported local sans-serif font. If none is available, set `FORGE_PLACEHOLDER_FONT` to the path of a local TrueType font before running it. Review regenerated assets before committing them.
+
+Card previews attach and load footage only on eligible desktop mouse hover. Touch users, reduced-motion users, and data-saving users keep static poster cards. Only one card preview plays at a time; leaving a card or hiding it stops, resets, and releases its clip. Videos never preload across the entire grid. Project players use native controls and wait for visitor interaction; portrait footage retains its aspect ratio. Loading or playback failures keep a useful poster and provide a retry path.
+
+Still images open a native-dialog fullscreen viewer with touch-friendly controls, arrow-key navigation, Escape to close, focus trapping, and focus restoration to the triggering image. Images keep their original aspect ratios. Without JavaScript, image links remain usable and project videos retain native controls; the hero keeps its poster fallback. No client framework or server rendering is required.
+
+After replacing media, run the full check, unit-test, build, and browser-test sequence above. The browser suite covers media controls, lazy preview loading, pointer and preference fallbacks, playback failures, lightbox keyboard/focus behavior, and responsive presentation alongside the existing gallery checks.
 
 ## Deployment compatibility
 

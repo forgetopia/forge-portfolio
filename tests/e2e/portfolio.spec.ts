@@ -116,7 +116,8 @@ test('every detail route is generated as a static page with accurate sample labe
     if (project.sample) await expect(page.locator('main')).toContainText(/sample/i);
     if (project.cover.placeholder) await expect(page.locator('main')).toContainText(/placeholder/i);
     expect(await page.locator('header a[href="/work/"][aria-current]').count()).toBeGreaterThan(0);
-    await expect(page.locator('video')).toHaveCount(0);
+    // Project films are progressively enhanced; their presence must match collection metadata.
+    await expect(page.locator('[data-project-video]')).toHaveCount(project.video ? 1 : 0);
   }
 });
 

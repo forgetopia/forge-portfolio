@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import Arrow from './Arrow.astro';
 import { categoryLabel, projectHref } from '../lib/projects';
 import '../styles/portfolio.css';
+import '../styles/card-previews.css';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -10,7 +11,7 @@ interface Props {
 }
 
 const { project, headingLevel = 'h3' } = Astro.props;
-const { title, summary, cover, categories, sample } = project.data;
+const { title, summary, cover, categories, sample, previewVideo } = project.data;
 const Heading = headingLevel;
 ---
 
@@ -19,6 +20,7 @@ const Heading = headingLevel;
   data-project-card
   data-slug={project.data.slug}
   data-categories={categories.join(' ')}
+  data-preview-state={previewVideo ? 'idle' : undefined}
 >
   <a class="project-card-link" href={projectHref(project.data.slug)} aria-label={`View project: ${title}`}>
     <div class="project-card-media" style={`--project-media-ratio: ${cover.width} / ${cover.height};`}>
@@ -30,6 +32,24 @@ const Heading = headingLevel;
         loading="lazy"
         decoding="async"
       />
+      {previewVideo && <>
+        <video
+          class="project-card-preview"
+          data-card-preview
+          data-src={previewVideo.src}
+          data-type={previewVideo.type}
+          data-placeholder={String(previewVideo.placeholder)}
+          width={previewVideo.width}
+          height={previewVideo.height}
+          preload="none"
+          muted
+          loop
+          playsinline
+          aria-hidden="true"
+          tabindex="-1"
+        ></video>
+        <span class="project-preview-label" aria-hidden="true" data-card-preview-status hidden></span>
+      </>}
       {cover.placeholder && <span class="project-media-label">Placeholder image</span>}
       <span class="project-card-open" aria-hidden="true"><Arrow /></span>
     </div>
@@ -41,3 +61,9 @@ const Heading = headingLevel;
     </div>
   </a>
 </article>
+
+<script>
+  import { initCardPreviews } from '../scripts/card-previews';
+
+  initCardPreviews();
+</script>

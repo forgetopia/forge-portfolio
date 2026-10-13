@@ -1,0 +1,54 @@
+.project-film-section { padding-top: 12px; padding-bottom: 52px; }
+.project-film-section .section-heading { margin-bottom: 28px; }
+.project-film-section .section-heading h2 { font-size: clamp(34px, 3.8vw, 54px); }
+.media-kind-label { color: var(--color-muted); font-size: 10px; }
+.project-player { margin: 0; }
+.project-player--portrait { max-width: min(640px, calc(80svh * var(--film-ratio))); margin-inline: auto; }
+.project-player-frame { position: relative; aspect-ratio: var(--film-ratio, 8/5); overflow: hidden; border: 1px solid var(--line); background: var(--color-graphite); }
+.project-player-frame video, .project-player-poster { display: block; width: 100%; height: 100%; object-fit: contain; }
+.project-player-poster { position: absolute; inset: 0; }
+.project-player-overlay { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; pointer-events: none; }
+.film-play-button { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 14px 20px; border: 1px solid var(--color-bronze); background: var(--color-obsidian); color: var(--color-ivory); font-family: var(--font-sans); font-size: 11px; cursor: pointer; pointer-events: auto; transition: color 180ms ease, background 180ms ease; }
+.film-play-button:hover { color: var(--color-obsidian); background: var(--color-bronze); }
+.film-play-button svg { width: 22px; height: 22px; }
+.project-player figcaption { margin-top: 16px; color: var(--color-muted); font-size: 10px; }
+.project-player-feedback { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 14px; }
+.project-player-feedback p { color: var(--color-bronze); font-size: 11px; }
+.project-player-feedback button { min-height: 44px; cursor: pointer; }
+.project-player [hidden] { display: none; }
+.media-transcript { margin-top: 24px; padding-block: 18px; border-block: 1px solid var(--line); color: var(--color-muted); font-size: 12px; }
+.media-transcript summary { width: fit-content; min-height: 44px; padding-block: 10px; color: var(--color-ivory); cursor: pointer; }
+.media-transcript p { margin-top: 14px; line-height: 1.9; }
+.media-noscript { margin-top: 16px; color: var(--color-muted); font-size: 12px; }
+.project-direction-section { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10%; padding-block: 52px; border-top: 1px solid var(--line); }
+.project-direction-section h2, .project-credits h2 { margin-top: 18px; font-family: var(--font-display); font-size: clamp(30px, 3.4vw, 46px); font-weight: 400; line-height: 1.12; letter-spacing: -.025em; }
+.project-direction-section h2 em { color: var(--color-bronze); }
+.project-credits { padding-top: 28px; padding-bottom: 60px; border-top: 1px solid var(--line); }
+.project-credits dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin: 28px 0 0; }
+.project-credits dt { color: var(--color-bronze); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.project-credits dd { margin: 8px 0 0; color: var(--color-ivory); font-size: 13px; }
+.project-credits > p:last-child { margin-top: 24px; color: var(--color-muted); font-size: 12px; }
+.project-pagination { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; padding-top: 34px; border-top: 1px solid var(--line); }
+.project-pagination-item { display: block; padding: 24px; border: 1px solid var(--line); transition: border-color 180ms ease; }
+.project-pagination-item:hover { border-color: var(--color-bronze); }
+.project-pagination-item > span:last-child { display: flex; justify-content: space-between; align-items: center; gap: 18px; margin-top: 12px; font-family: var(--font-display); font-size: clamp(27px, 3vw, 40px); line-height: 1.15; letter-spacing: -.025em; }
+.project-pagination-item .arrow-icon { width: 22px; height: 22px; }
+.project-pagination-back { grid-column: 1/-1; margin-top: 4px; }
+
+@media (max-width: 640px) {
+  .project-film-section { padding-bottom: 34px; }
+  .project-film-section .section-heading { margin-bottom: 22px; }
+  .media-kind-label { display: block; margin-top: 12px; font-size: 9px; }
+  .film-play-button { min-height: 44px; padding: 10px 16px; }
+  .project-player figcaption { font-size: 9px; }
+  .project-direction-section { grid-template-columns: 1fr; gap: 26px; padding-block: 36px; }
+  .project-credits { padding-bottom: 44px; }
+  .project-credits dl { grid-template-columns: 1fr; }
+  .project-pagination { grid-template-columns: 1fr; gap: 16px; }
+  .project-pagination-item { padding: 20px; }
+  .project-pagination-item > span:last-child { font-size: 30px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-play-button, .project-pagination-item { transition: none; }
+}
