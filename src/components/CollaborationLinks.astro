@@ -1,0 +1,34 @@
+---
+import Arrow from './Arrow.astro';
+import { site } from '../data/site';
+import { buildMailtoLink, type SiteConfig } from '../lib/site-schema';
+
+interface Props {
+  configuration?: SiteConfig;
+}
+
+const { configuration = site } = Astro.props;
+const emailHref = buildMailtoLink(configuration.contactEmail, configuration.contactSubject);
+---
+
+{emailHref ? (
+  <a class="contact-email text-link" href={emailHref} data-contact-link>
+    <span><span class="contact-link-label">Email {configuration.name}</span>{configuration.contactEmail}</span>
+    <Arrow />
+  </a>
+) : (
+  <div class="contact-coming-soon" data-contact-fallback>
+    <span class="status-dot" aria-hidden="true"></span>
+    <p>Contact details will be shared here soon.<br /><span>A verified public email address has not yet been supplied.</span></p>
+  </div>
+)}
+
+{configuration.socialLinks.length > 0 && (
+  <nav class="social-portfolio-links" aria-label="Social portfolio links">
+    <ul>
+      {configuration.socialLinks.map((link) => (
+        <li><a class="text-link" href={link.url} target="_blank" rel="noopener noreferrer">{link.label}<span class="sr-only"> (opens in a new tab)</span><Arrow /></a></li>
+      ))}
+    </ul>
+  </nav>
+)}

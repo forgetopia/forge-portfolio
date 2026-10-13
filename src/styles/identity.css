@@ -1,0 +1,51 @@
+.identity-introduction .about-copy { min-width: 0; }
+.identity-profile-image.about-art { aspect-ratio: var(--profile-ratio); max-height: 42rem; }
+.identity-profile-image.about-art img { object-fit: contain; }
+.identity-introduction .identity-professional-title { color: var(--color-bronze); }
+.identity-studio-name { font-size: 11px; }
+.identity-section { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr); gap: clamp(28px, 6vw, 90px); padding-bottom: clamp(56px, 6vw, 90px); }
+.identity-section-heading { border-top: 1px solid var(--line); padding-top: 24px; }
+.identity-section-heading h2, .identity-collaboration h2 { margin-top: 18px; font-family: var(--font-display); font-size: clamp(2rem, 3.6vw, 3.375rem); font-weight: 400; line-height: 1.12; letter-spacing: -.025em; }
+.identity-section-copy { padding-top: 24px; border-top: 1px solid var(--line); min-width: 0; }
+.identity-section-copy > p, .identity-section-copy li p, .identity-principles p, .identity-collaboration > div > p:last-child, .identity-service-grid p, .identity-services-pending { color: var(--color-muted); font-size: 12px; line-height: 1.95; }
+.identity-section-copy > p + p { margin-top: 18px; }
+.identity-principles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 36px; }
+.identity-principles h3 { font-family: var(--font-display); font-size: 28px; font-weight: 400; line-height: 1.15; margin-top: 12px; }
+.identity-principles p { margin-top: 14px; }
+.identity-disciplines { margin: 24px 0 0; padding: 0; list-style: none; }
+.identity-disciplines li { padding-block: 15px; border-bottom: 1px solid var(--line); font-size: 13px; }
+.identity-workflow { display: grid; gap: 28px; list-style: none; margin: 32px 0 0; padding: 0; }
+.identity-workflow li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 18px; }
+.identity-workflow li > .eyebrow { padding-top: 5px; }
+.identity-workflow h3, .identity-capabilities h3, .identity-service-grid h3 { font-family: var(--font-display); font-size: 28px; font-weight: 400; line-height: 1.2; }
+.identity-workflow p, .identity-capabilities p, .identity-service-grid p { margin-top: 12px; }
+.identity-capabilities { display: grid; gap: 30px; list-style: none; margin: 0; padding: 0; }
+.identity-collaboration { display: flex; justify-content: space-between; align-items: end; gap: 32px; padding-block: clamp(32px, 5vw, 64px) clamp(56px, 7vw, 100px); }
+.identity-collaboration > div { max-width: 680px; }
+.identity-collaboration > div > p:last-child { margin-top: 20px; max-width: 480px; }
+.identity-collaboration > .text-link { flex-shrink: 0; }
+.contact-link-label { display: block; margin-bottom: 6px; color: var(--color-bronze); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.contact-email > span { min-width: 0; overflow-wrap: anywhere; }
+.collaboration-availability { display: flex; align-items: start; gap: 10px; margin-top: 24px; color: var(--color-muted); font-size: 11px; }
+.collaboration-availability .status-dot { margin-top: 8px; }
+.social-portfolio-links { margin-top: 24px; }
+.social-portfolio-links ul { display: flex; flex-wrap: wrap; gap: 8px 24px; list-style: none; margin: 0; padding: 0; }
+.social-portfolio-links li { min-width: 0; max-width: 100%; }
+.identity-services { padding-bottom: clamp(64px, 8vw, 120px); }
+.identity-services > .identity-section-heading { max-width: 600px; }
+.identity-service-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 4vw, 60px); margin: 36px 0 0; padding: 0; list-style: none; }
+.identity-services-pending { margin-top: 28px; max-width: 560px; }
+.contact-aside .text-link { display: flex; }
+@media (max-width: 900px) {
+  .identity-principles { grid-template-columns: 1fr; }
+  .identity-principles p { max-width: 480px; }
+  .identity-service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .identity-section { grid-template-columns: 1fr; gap: 24px; }
+  .identity-section-copy { padding-top: 0; border-top: 0; }
+  .identity-section-heading h2, .identity-collaboration h2 { font-size: clamp(2rem, 9vw, 2.625rem); }
+  .identity-collaboration { flex-direction: column; align-items: start; gap: 22px; }
+  .identity-workflow li { grid-template-columns: 20px minmax(0, 1fr); gap: 14px; }
+  .identity-service-grid { grid-template-columns: 1fr; }
+}

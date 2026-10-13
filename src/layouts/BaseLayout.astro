@@ -7,15 +7,19 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
+import { showreel } from '../data/showreel';
+import type { ImageData } from '../lib/project-schema';
+import { pageMetadata } from '../lib/seo';
 
 interface Props {
   title?: string;
   description?: string;
   showInvitation?: boolean;
+  shareImage?: ImageData;
 }
 
-const { title, description = site.description, showInvitation = true } = Astro.props;
-const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.tagline}`;
+const { title, description = site.description, showInvitation = true, shareImage = site.profileImage ?? showreel.poster } = Astro.props;
+const metadata = pageMetadata({ site, title, description, path: Astro.url.pathname, shareImage });
 ---
 
 <!doctype html>
@@ -25,12 +29,29 @@ const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#101110" />
-    <meta property="og:title" content={pageTitle} />
+    <meta property="og:title" content={metadata.title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={metadata.siteName} />
+    {metadata.canonical && <>
+      <link rel="canonical" href={metadata.canonical} />
+      <meta property="og:url" content={metadata.canonical} />
+    </>}
+    {metadata.imageURL && <>
+      <meta property="og:image" content={metadata.imageURL} />
+      <meta property="og:image:alt" content={shareImage.alt} />
+      <meta property="og:image:width" content={String(shareImage.width)} />
+      <meta property="og:image:height" content={String(shareImage.height)} />
+      <meta name="twitter:image" content={metadata.imageURL} />
+      <meta name="twitter:image:alt" content={shareImage.alt} />
+    </>}
+    <meta name="twitter:card" content={metadata.imageURL ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={metadata.title} />
+    <meta name="twitter:description" content={description} />
+    {site.productionOrigin && <link rel="sitemap" type="application/xml" href="/sitemap.xml" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
-    <title>{pageTitle}</title>
+    <title>{metadata.title}</title>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>

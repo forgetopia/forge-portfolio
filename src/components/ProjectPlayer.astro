@@ -14,7 +14,7 @@ const { video, poster, title } = Astro.props;
 <section class="project-film-section" aria-labelledby="project-film-heading">
   <div class="section-heading">
     <div><p class="eyebrow">Motion & narrative</p><h2 id="project-film-heading">The <em>film.</em></h2></div>
-    {video.placeholder && <span class="media-kind-label">Placeholder clip · Silent test footage</span>}
+    {video.placeholder && <span class="media-kind-label">Placeholder clip{!video.hasAudio && ' · Silent test footage'}</span>}
   </div>
   <figure class:list={['project-player', `project-player--${video.orientation}`]} style={`--film-ratio: ${video.width} / ${video.height};`} data-project-player data-player-state="idle">
     <div class="project-player-frame" style={`--film-ratio: ${video.width} / ${video.height};`}>
@@ -28,6 +28,7 @@ const { video, poster, title } = Astro.props;
         controls
         tabindex="0"
         playsinline
+        crossorigin={video.src.startsWith('https://') || video.captions.some((caption) => caption.src.startsWith('https://')) ? 'anonymous' : undefined}
         preload="none"
         aria-label={`${title} — project film`}
         aria-describedby="project-film-note"

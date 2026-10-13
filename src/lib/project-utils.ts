@@ -1,6 +1,17 @@
 import { projectCategories, type ProjectCategory, type ProjectData } from './project-schema';
 
 type SortableProject = { data: Pick<ProjectData, 'order' | 'slug'> };
+type PublishableProject = { data: Pick<ProjectData, 'status'> & Partial<Pick<ProjectData, 'sample'>> };
+
+/** Sample labeling is independent of publication: an explicit draft is always private. */
+export function isPublicProject(project: PublishableProject): boolean {
+  if (project.data.status !== undefined) return project.data.status === 'published';
+  return project.data.sample === true;
+}
+
+export function filterPublicProjects<Project extends PublishableProject>(projects: readonly Project[]): Project[] {
+  return projects.filter(isPublicProject);
+}
 
 /** Derive collection identity from the file, independently of its editable slug. */
 export function projectIdFromFilename(filename: string): string {
@@ -33,10 +44,10 @@ export function validateProjectEntries(
   }
 }
 
-export function getFeaturedProjects<Project extends SortableProject & {
+export function getFeaturedProjects<Project extends SortableProject & PublishableProject & {
   data: Pick<ProjectData, 'order' | 'slug' | 'featured'>;
 }>(projects: readonly Project[]): Project[] {
-  return sortProjects(projects).filter(({ data }) => data.featured);
+  return sortProjects(filterPublicProjects(projects)).filter(({ data }) => data.featured);
 }
 
 export function projectHref(slug: string): string {

@@ -1,27 +1,79 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import Arrow from '../components/Arrow.astro';
+import { site } from '../data/site';
+import '../styles/identity.css';
+
+const { about } = site;
+const displayName = site.creatorDisplayName ?? `${site.name} — ${site.tagline}`;
+const profileImage = site.profileImage;
 ---
 
-<PageLayout title="About" eyebrow="02 / The perspective" description="Meet FORGE, an independent creative practice at the intersection of human imagination and AI filmmaking.">
-  <Fragment slot="heading">Human imagination.<br /><em>New possibilities.</em></Fragment>
-  <Fragment slot="description">FORGE is an independent visual universe.<br class="hidden sm:block" /> Built on curiosity. Shaped by imagination.</Fragment>
-  <section class="site-shell about-section" aria-labelledby="philosophy-heading">
-    <figure class="about-art"><img src="/art/form.svg" alt="An abstract bronze form illuminated against a dark background" width="1200" height="900" /><figcaption>Form study / Visual placeholder</figcaption></figure>
+<PageLayout title="About" eyebrow="02 / The perspective" description="The creative direction, focus territories, and AI-assisted process behind FORGE — Visual Universe." showInvitation={false}>
+  <Fragment slot="heading">{about.introductionHeading}</Fragment>
+  <Fragment slot="description">{about.introductionDescription}</Fragment>
+
+  <section class="site-shell about-section identity-introduction" aria-labelledby="creative-introduction-heading" data-about-section="introduction">
+    <figure class:list={['about-art', profileImage && 'identity-profile-image']} style={profileImage ? `--profile-ratio: ${profileImage.width} / ${profileImage.height}` : undefined}>
+      {profileImage ? (
+        <img src={profileImage.src} alt={profileImage.alt} width={profileImage.width} height={profileImage.height} loading="lazy" decoding="async" />
+      ) : (
+        <img src="/art/form.svg" alt="An abstract bronze form illuminated against a dark background; visual placeholder" width="1200" height="900" loading="lazy" decoding="async" />
+      )}
+      {(!profileImage || profileImage.placeholder || profileImage.caption) && (
+        <figcaption>{profileImage?.caption ?? (!profileImage ? 'Form study / Visual placeholder' : 'Profile image / Visual placeholder')}{profileImage?.caption && profileImage.placeholder ? ' / Placeholder' : ''}</figcaption>
+      )}
+    </figure>
     <div class="about-copy">
-      <p class="eyebrow">The philosophy</p>
-      <h2 id="philosophy-heading">The tools evolve.<br />The impulse to <em>create</em> stays.</h2>
-      <p>FORGE explores what happens when cinematic thinking meets emerging creative tools. Film, digital art, fantasy worlds, fashion, and surreal imagery are all part of the same conversation.</p>
-      <p>AI is part of the process. The intention is human: to find an atmosphere, evoke a feeling, and bring something unexpected into view.</p>
+      <p class="eyebrow">Creative introduction</p>
+      <h2 id="creative-introduction-heading">{displayName}</h2>
+      {site.professionalTitle && <p class="identity-professional-title">{site.professionalTitle}</p>}
+      {site.studioName && <p class="identity-studio-name">{site.studioName}</p>}
+      <p>{site.shortBio ?? about.introductionDescription}</p>
       <a href="/work/" class="text-link">Explore the creative territories <Arrow /></a>
     </div>
   </section>
-  <section class="site-shell principles-section" aria-labelledby="principles-heading">
-    <h2 id="principles-heading" class="eyebrow">What guides the work</h2>
-    <div class="principles-grid">
-      <article><span class="eyebrow">01 / Intention</span><h3>Feeling first.</h3><p>Every image begins with the atmosphere it should create.</p></article>
-      <article><span class="eyebrow">02 / Curiosity</span><h3>Beyond the familiar.</h3><p>Follow an idea into places that don't exist yet.</p></article>
-      <article><span class="eyebrow">03 / Craft</span><h3>Consider every detail.</h3><p>From the first frame to the smallest texture, make it matter.</p></article>
+
+  <section class="site-shell identity-section identity-philosophy" aria-labelledby="philosophy-heading" data-about-section="philosophy">
+    <div class="identity-section-heading">
+      <p class="eyebrow">Artistic philosophy</p>
+      <h2 id="philosophy-heading">{about.philosophyHeading}</h2>
     </div>
+    <div class="identity-section-copy">
+      {about.philosophyParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+      <div class="identity-principles">
+        {about.principles.map((principle, index) => <article><span class="eyebrow">{String(index + 1).padStart(2, '0')}</span><h3>{principle.title}</h3><p>{principle.description}</p></article>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="site-shell identity-section" aria-labelledby="disciplines-heading" data-about-section="disciplines">
+    <div class="identity-section-heading"><p class="eyebrow">Creative disciplines</p><h2 id="disciplines-heading">Creative territories.</h2></div>
+    <div class="identity-section-copy">
+      <p>Focus areas for the FORGE visual universe.</p>
+      {site.creativeDisciplines.length > 0 ? (
+        <ul class="identity-disciplines">{site.creativeDisciplines.map((discipline) => <li>{discipline}</li>)}</ul>
+      ) : <p>Creative focus areas will be shared here when supplied.</p>}
+    </div>
+  </section>
+
+  <section class="site-shell identity-section" aria-labelledby="workflow-heading" data-about-section="workflow">
+    <div class="identity-section-heading"><p class="eyebrow">AI-assisted production workflow</p><h2 id="workflow-heading">From intention to image.</h2></div>
+    <div class="identity-section-copy">
+      <p>{about.workflowIntroduction}</p>
+      <ol class="identity-workflow">{about.productionWorkflow.map((step, index) => <li><span class="eyebrow" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span><div><h3>{step.title}</h3><p>{step.description}</p></div></li>)}</ol>
+    </div>
+  </section>
+
+  <section class="site-shell identity-section" aria-labelledby="capabilities-heading" data-about-section="capabilities">
+    <div class="identity-section-heading"><p class="eyebrow">Selected skills & capabilities</p><h2 id="capabilities-heading">A considered practice.</h2></div>
+    <div class="identity-section-copy">
+      {site.capabilities.length > 0 ? <ul class="identity-capabilities">{site.capabilities.map((capability) => <li><h3>{capability.title}</h3><p>{capability.description}</p></li>)}</ul> : <p>{about.capabilitiesIntroduction}</p>}
+    </div>
+  </section>
+
+  <section class="site-shell identity-collaboration" aria-labelledby="collaboration-heading" data-about-section="collaboration">
+    <div><p class="eyebrow">Collaboration</p><h2 id="collaboration-heading">{about.collaborationHeading}</h2><p>{about.collaborationDescription}</p></div>
+    <a href="/contact/" class="text-link">Explore collaboration <Arrow /></a>
   </section>
 </PageLayout>

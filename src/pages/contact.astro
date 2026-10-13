@@ -1,22 +1,30 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import Arrow from '../components/Arrow.astro';
+import CollaborationLinks from '../components/CollaborationLinks.astro';
 import { site } from '../data/site';
+import { collaborationAvailabilityLabel } from '../lib/site-schema';
+import '../styles/identity.css';
+
+const availability = collaborationAvailabilityLabel(site.collaborationAvailability);
 ---
 
-<PageLayout title="Contact" eyebrow="03 / The conversation" description="A space for future collaborations, creative conversations, and new possibilities with FORGE." showInvitation={false}>
+<PageLayout title="Contact" eyebrow="03 / The conversation" description="Professional collaboration, creative services, and public contact information for FORGE — Visual Universe." showInvitation={false}>
   <Fragment slot="heading">Something extraordinary<br />starts with <em>an idea.</em></Fragment>
-  <Fragment slot="description">For creative collaborations, cinematic experiments,<br class="hidden sm:block" /> or an idea that deserves its own universe.</Fragment>
+  <Fragment slot="description">{site.collaborationIntroduction ?? 'For creative collaborations, cinematic experiments, or an idea that deserves its own universe.'}</Fragment>
   <section class="site-shell contact-section" aria-labelledby="contact-heading">
     <div class="contact-panel">
       <p class="eyebrow">The next chapter</p>
       <h2 id="contact-heading">Let's start a <em>conversation.</em></h2>
-      {site.contactEmail ? (
-        <a class="contact-email text-link" href={`mailto:${site.contactEmail}`}>{site.contactEmail}<Arrow /></a>
-      ) : (
-        <div class="contact-coming-soon"><span class="status-dot"></span><p>A direct line is on its way.<br /><span>Contact details will be shared here soon.</span></p></div>
-      )}
+      {availability && <p class="collaboration-availability" data-collaboration-availability><span class="status-dot" aria-hidden="true"></span>{availability}</p>}
+      <CollaborationLinks />
     </div>
-    <div class="contact-aside"><p class="eyebrow">In the meantime</p><p>Step inside the creative territories and discover the vision behind FORGE.</p><a href="/work/" class="text-link">Explore the universe <Arrow /></a></div>
+    <div class="contact-aside"><p class="eyebrow">The creative direction</p><p>Step inside the creative territories and discover the vision behind FORGE.</p><a href="/work/" class="text-link">Explore the universe <Arrow /></a><a href="/about/" class="text-link">Meet the perspective <Arrow /></a></div>
+  </section>
+  <section class="site-shell identity-services" aria-labelledby="services-heading">
+    <div class="identity-section-heading"><p class="eyebrow">Creative services</p><h2 id="services-heading">Shape the possibilities.</h2></div>
+    {site.creativeServices.length > 0 ? (
+      <ul class="identity-service-grid">{site.creativeServices.map((service) => <li><h3>{service.title}</h3><p>{service.description}</p></li>)}</ul>
+    ) : <p class="identity-services-pending">A list of creative services will appear here once the details are supplied and approved.</p>}
   </section>
 </PageLayout>
