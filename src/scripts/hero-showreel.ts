@@ -37,7 +37,7 @@ export function initHeroShowreels() {
     const updatePlayControl = (retry = false) => {
       play.setAttribute('aria-label', wantsPlayback ? 'Pause showreel' : retry ? 'Retry showreel' : 'Play showreel');
       playLabel.textContent = wantsPlayback ? 'Pause' : retry ? 'Retry' : 'Play';
-      playIcon.textContent = wantsPlayback ? 'Ⅱ' : '\u25B6\uFE0E';
+      playIcon.classList.toggle('is-playing', wantsPlayback);
     };
 
     const updateMuteControl = () => {

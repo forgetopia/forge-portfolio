@@ -11,7 +11,7 @@
 .still-frame-link:hover .still-expand, .still-frame-link:focus-visible .still-expand { background: var(--color-bronze); color: var(--color-obsidian); }
 
 .image-lightbox { position: fixed; inset: 0; width: 100%; max-width: none; height: 100vh; height: 100dvh; max-height: none; margin: 0; padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); border: 0; color: var(--color-ivory); background: var(--color-obsidian); overscroll-behavior: contain; }
-.image-lightbox[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 16px; }
+.image-lightbox[open] { display: grid; grid-template-rows: auto minmax(48px, 1fr) auto; gap: 16px; overflow-y: auto; }
 .image-lightbox::backdrop { background: var(--color-obsidian); }
 .image-lightbox [hidden] { display: none; }
 .lightbox-header { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
@@ -36,6 +36,7 @@
 }
 
 @media (max-width: 640px) {
+  .image-lightbox[open] { grid-template-rows: auto minmax(44px, 1fr) auto; }
   .still-gallery { padding-block: 34px 46px; }
   .still-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .still-gallery-note { margin-top: 16px; font-size: 10px; }

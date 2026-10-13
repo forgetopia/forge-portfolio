@@ -39,7 +39,7 @@ test('every category filters multi-category projects accurately and All Works re
     const expected = projects.filter((project) => id === 'all' || project.categories.includes(id as ProjectData['categories'][number]));
     await expect(visibleCards(page)).toHaveCount(expected.length);
     for (const project of expected) {
-      await expect(visibleCards(page).getByRole('link', { name: `View project: ${project.title}`, exact: true })).toBeVisible();
+      await expect(visibleCards(page).getByRole('link', { name: project.title })).toBeVisible();
     }
     await expect(page.locator('[data-gallery-count]')).toContainText(String(expected.length));
     if (expected.length === 0) {

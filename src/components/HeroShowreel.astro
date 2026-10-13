@@ -38,7 +38,7 @@ const { poster, video, autoplay } = showreel;
     <p class="hero-media-label">{video.placeholder ? 'Placeholder showreel' : 'Showreel'}{!video.hasAudio && <span> · Silent clip</span>}</p>
     <div class="hero-media-buttons">
       <button type="button" data-hero-play aria-label="Play showreel" aria-controls="hero-showreel-video">
-        <span class="hero-control-icon" aria-hidden="true" data-hero-play-icon>▶︎</span>
+        <span class="hero-control-icon hero-play-icon" aria-hidden="true" data-hero-play-icon></span>
         <span data-hero-play-label>Play</span>
       </button>
       <button type="button" data-hero-mute aria-label="Unmute showreel" aria-controls="hero-showreel-video">
@@ -58,6 +58,7 @@ const { poster, video, autoplay } = showreel;
       {video.transcript && <details class="hero-media-transcript"><summary>Clip description</summary><p>{video.transcript}</p></details>}
     </div>
   </noscript>
+  <slot name="bottom" />
 </section>
 
 <script>

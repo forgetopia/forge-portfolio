@@ -2,6 +2,10 @@ import { defineConfig } from '@playwright/test';
 
 const port = process.env.PORTFOLIO_TEST_PORT ?? '4173';
 const baseURL = `http://127.0.0.1:${port}`;
+const browser = process.env.PORTFOLIO_TEST_BROWSER ?? 'chromium';
+if (browser !== 'chromium' && browser !== 'firefox' && browser !== 'webkit') {
+  throw new Error('PORTFOLIO_TEST_BROWSER must be chromium, firefox, or webkit.');
+}
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -12,9 +16,9 @@ export default defineConfig({
   reporter: 'list',
   use: {
     baseURL,
-    browserName: 'chromium',
+    browserName: browser,
     trace: 'retain-on-failure',
-    launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
+    launchOptions: browser === 'chromium' && process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
       ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH }
       : {},
   },

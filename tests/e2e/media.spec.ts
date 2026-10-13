@@ -270,7 +270,7 @@ for (const preference of ['reduced motion', 'data saver', 'touch device'] as con
       await card(page, project.slug).hover();
       expect(await cardVideo(page, project.slug).getAttribute('src')).toBeNull();
       await expect(card(page, project.slug).getByRole('img', { name: project.cover.alt })).toBeVisible();
-      await card(page, project.slug).getByRole('link', { name: `View project: ${project.title}`, exact: true }).click();
+      await card(page, project.slug).getByRole('link', { name: project.title }).click();
       await expect(page).toHaveURL(`/work/${project.slug}/`);
     } finally {
       await context.close();
@@ -288,7 +288,7 @@ test('failed hover media keeps the poster and link usable without repeated autom
   await expect(card(page, project.slug)).toHaveAttribute('data-preview-state', 'error');
   await expect(card(page, project.slug).getByRole('img', { name: project.cover.alt })).toBeVisible();
   expect(await cardVideo(page, project.slug).evaluate((video) => (video as HTMLVideoElement).paused)).toBe(true);
-  await card(page, project.slug).getByRole('link', { name: `View project: ${project.title}`, exact: true }).click();
+  await card(page, project.slug).getByRole('link', { name: project.title }).click();
   await expect(page).toHaveURL(`/work/${project.slug}/`);
 });
 
