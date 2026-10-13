@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title description">
+  <title id="title">Landscape image placeholder</title>
+  <desc id="description">A plain graphite wireframe with an explicit placeholder label. No original artwork.</desc>
+  <rect width="1600" height="1000" fill="#1c1d1b"/>
+  <g fill="none" stroke="#ece9e0" stroke-opacity=".12" stroke-width="2">
+    <rect x="64" y="64" width="1472" height="872"/>
+    <path d="M64 64 1536 936M1536 64 64 936"/>
+  </g>
+  <rect x="440" y="410" width="720" height="180" fill="#1c1d1b"/>
+  <g fill="#b2a083" font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="800" y="474" font-size="32" letter-spacing="8">IMAGE PLACEHOLDER</text>
+    <text x="800" y="538" font-size="20" letter-spacing="4">LANDSCAPE · 1600 × 1000</text>
+  </g>
+</svg>

@@ -1,0 +1,21 @@
+{
+  "slug": "the-long-night",
+  "title": "The Long Night",
+  "summary": "A sample AI Films record showing the portfolio's landscape presentation.",
+  "description": [
+    "This sample entry demonstrates the project page structure for The Long Night. Original artwork and verified project information have not been supplied.",
+    "The category, summary, and image are demonstration content. Replace them with approved material before presenting this entry as a completed work."
+  ],
+  "categories": ["ai-films"],
+  "cover": {
+    "src": "/placeholders/landscape.svg",
+    "alt": "Clearly labeled landscape image placeholder; no artwork supplied for The Long Night.",
+    "width": 1600,
+    "height": 1000,
+    "orientation": "landscape",
+    "placeholder": true
+  },
+  "featured": true,
+  "order": 1,
+  "sample": true
+}

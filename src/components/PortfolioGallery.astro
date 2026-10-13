@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+import { projectCategories } from '../lib/project-schema';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+}
+
+const { projects } = Astro.props;
+---
+
+<div class="portfolio-gallery" data-portfolio-gallery>
+  <div class="portfolio-filters" data-gallery-controls hidden>
+    <fieldset>
+      <legend class="sr-only">Filter projects by category</legend>
+      <div class="portfolio-filter-buttons">
+        <button type="button" data-category-filter="all" aria-pressed="true" aria-controls="portfolio-grid">All Works</button>
+        {projectCategories.map(({ id, label }) => (
+          <button type="button" data-category-filter={id} aria-pressed="false" aria-controls="portfolio-grid">{label}</button>
+        ))}
+      </div>
+    </fieldset>
+  </div>
+  <div class="gallery-context">
+    <p class="eyebrow">The collection</p>
+    <p class="gallery-count" data-gallery-count role="status" aria-live="polite" aria-atomic="true">Showing {projects.length} {projects.length === 1 ? 'work' : 'works'}</p>
+  </div>
+  <div id="portfolio-grid" class="project-grid">
+    {projects.map((project) => <ProjectCard project={project} />)}
+  </div>
+  <div class="gallery-empty" data-gallery-empty hidden={projects.length !== 0}>
+    <span class="small-cross" aria-hidden="true">+</span>
+    <h3>A new chapter is taking shape.</h3>
+    <p>No works in this category yet. Explore the rest of the collection.</p>
+    <button type="button" class="text-link" data-gallery-reset>View all works <span aria-hidden="true">↗</span></button>
+  </div>
+</div>
+
+<script>
+  import { initPortfolioGalleries } from '../scripts/portfolio-gallery';
+
+  initPortfolioGalleries();
+</script>

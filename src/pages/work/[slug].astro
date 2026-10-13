@@ -1,0 +1,47 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Arrow from '../../components/Arrow.astro';
+import { categoryLabel, getProjects, projectHref } from '../../lib/projects';
+import '../../styles/portfolio.css';
+
+export const getStaticPaths = (async () => {
+  const projects = await getProjects();
+
+  return projects.map((project, index) => ({
+    params: { slug: project.data.slug },
+    props: { project, nextProject: projects.length > 1 ? projects[(index + 1) % projects.length] : undefined },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { project, nextProject } = Astro.props;
+const { title, summary, description, categories, cover, sample } = project.data;
+---
+
+<BaseLayout title={title} description={summary}>
+  <article class="site-shell project-detail">
+    <a class="text-link project-back" href="/work/"><span aria-hidden="true">←</span>All works</a>
+    <header class="project-detail-header">
+      <p class="eyebrow">{categories.map(categoryLabel).join(' / ')}</p>
+      <h1>{title}</h1>
+      <p class="project-detail-summary">{summary}</p>
+      {sample && <p class="project-detail-notice"><span class="status-dot"></span>Sample project · Details and category assignments are illustrative.</p>}
+    </header>
+    <figure class:list={['project-detail-media', `project-detail-media--${cover.orientation}`]}>
+      <div class="project-detail-frame" style={`--project-media-ratio: ${cover.width} / ${cover.height};`}>
+        <img src={cover.src} alt={cover.alt} width={cover.width} height={cover.height} fetchpriority="high" />
+        {cover.placeholder && <span class="project-media-label">Placeholder image</span>}
+      </div>
+      <figcaption>{cover.placeholder ? 'Placeholder media. Original project imagery has not been provided.' : cover.alt}</figcaption>
+    </figure>
+    <section class="project-overview" aria-labelledby="overview-heading">
+      <div><p class="eyebrow">The project</p><h2 id="overview-heading">Inside the <em>universe.</em></h2></div>
+      <div class="project-prose">{description.map((paragraph) => <p>{paragraph}</p>)}</div>
+    </section>
+    {nextProject && <nav class="project-next" aria-label="Project navigation">
+      <div><p class="eyebrow">Next project</p><a href={projectHref(nextProject.data.slug)}>{nextProject.data.title} <Arrow /></a></div>
+      <a class="text-link" href="/work/">Back to the collection <Arrow direction="right" /></a>
+    </nav>}
+  </article>
+</BaseLayout>

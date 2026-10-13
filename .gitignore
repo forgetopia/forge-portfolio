@@ -147,3 +147,7 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Automated browser test artifacts
+test-results/
+playwright-report/

@@ -2,6 +2,7 @@
 import { navigation, site } from '../data/site';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const currentState = (href: string) => path === href.replace(/\/$/, '') ? 'page' : path.startsWith(href) ? 'true' : undefined;
 ---
 
 <header class="site-header">
@@ -12,7 +13,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     </a>
     <nav class="desktop-navigation" aria-label="Main navigation">
       {navigation.map(({ label, href }) => (
-        <a href={href} aria-current={path === href.replace(/\/$/, '') ? 'page' : undefined}>{label}</a>
+        <a href={href} aria-current={currentState(href)}>{label}</a>
       ))}
     </nav>
     <span class="header-note"><span class="status-dot"></span>Independent imagination</span>
@@ -24,7 +25,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
       <nav aria-label="Mobile navigation">
         <a href="/" aria-current={path === '/' ? 'page' : undefined}>Home</a>
         {navigation.map(({ label, href }) => (
-          <a href={href} aria-current={path === href.replace(/\/$/, '') ? 'page' : undefined}>{label}</a>
+          <a href={href} aria-current={currentState(href)}>{label}</a>
         ))}
       </nav>
     </details>

@@ -1,14 +1,18 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
-import StudyGrid from '../components/StudyGrid.astro';
+import PortfolioGallery from '../components/PortfolioGallery.astro';
+import CollectionNotice from '../components/CollectionNotice.astro';
+import { getProjects } from '../lib/projects';
+
+const projects = await getProjects();
 ---
 
-<PageLayout title="Work" eyebrow="01 / The work" description="Explore FORGE's creative territories: cinematic films, imagined worlds, and digital art.">
+<PageLayout title="Work" eyebrow="01 / The work" description="Explore FORGE's portfolio of AI films, fantasy live-action, digital art, and experimental visual worlds.">
   <Fragment slot="heading">A window into<br /><em>other worlds.</em></Fragment>
   <Fragment slot="description">Cinematic stories. Impossible landscapes. Unexpected forms.<br class="hidden sm:block" /> An evolving collection of imagination, made visible.</Fragment>
-  <section class="site-shell work-section" aria-labelledby="territories-heading">
-    <div class="collection-header"><h2 id="territories-heading" class="eyebrow">Creative territories</h2><p>Collection in development</p></div>
-    <StudyGrid />
-    <div class="empty-collection"><span class="small-cross" aria-hidden="true">+</span><p>The first chapter is on its way.</p><span>These visual placeholders set the atmosphere. Original films and artwork will live here.</span></div>
+  <section class="site-shell work-section" aria-labelledby="portfolio-heading">
+    <h2 id="portfolio-heading" class="sr-only">Portfolio projects</h2>
+    <PortfolioGallery projects={projects} />
+    <CollectionNotice projects={projects} />
   </section>
 </PageLayout>

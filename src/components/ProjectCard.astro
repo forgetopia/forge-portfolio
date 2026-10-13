@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Arrow from './Arrow.astro';
+import { categoryLabel, projectHref } from '../lib/projects';
+import '../styles/portfolio.css';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { project, headingLevel = 'h3' } = Astro.props;
+const { title, summary, cover, categories, sample } = project.data;
+const Heading = headingLevel;
+---
+
+<article
+  class:list={['project-card', `project-card--${cover.orientation}`]}
+  data-project-card
+  data-slug={project.data.slug}
+  data-categories={categories.join(' ')}
+>
+  <a class="project-card-link" href={projectHref(project.data.slug)} aria-label={`View project: ${title}`}>
+    <div class="project-card-media" style={`--project-media-ratio: ${cover.width} / ${cover.height};`}>
+      <img
+        src={cover.src}
+        alt={cover.alt}
+        width={cover.width}
+        height={cover.height}
+        loading="lazy"
+        decoding="async"
+      />
+      {cover.placeholder && <span class="project-media-label">Placeholder image</span>}
+      <span class="project-card-open" aria-hidden="true"><Arrow /></span>
+    </div>
+    <div class="project-card-caption">
+      <p class="eyebrow">{categories.map(categoryLabel).join(' / ')}</p>
+      <Heading>{title}</Heading>
+      <p class="project-card-summary">{summary}</p>
+      {sample && <span class="project-sample-label">Sample project</span>}
+    </div>
+  </a>
+</article>
