@@ -1,0 +1,21 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow: string;
+  showInvitation?: boolean;
+}
+
+const { title, description, eyebrow, showInvitation = true } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} showInvitation={showInvitation}>
+  <section class="site-shell page-introduction">
+    <p class="eyebrow"><span class="small-cross" aria-hidden="true">+</span>{eyebrow}</p>
+    <h1><slot name="heading" /></h1>
+    <p class="page-description"><slot name="description" /></p>
+  </section>
+  <slot />
+</BaseLayout>

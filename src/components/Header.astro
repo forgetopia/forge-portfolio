@@ -1,0 +1,32 @@
+---
+import { navigation, site } from '../data/site';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="site-header">
+  <div class="site-shell header-inner">
+    <a class="wordmark" href="/" aria-label="FORGE — Home">
+      <span class="wordmark-name">{site.name}<span class="wordmark-dot" aria-hidden="true">+</span></span>
+      <span class="wordmark-caption">{site.tagline}</span>
+    </a>
+    <nav class="desktop-navigation" aria-label="Main navigation">
+      {navigation.map(({ label, href }) => (
+        <a href={href} aria-current={path === href.replace(/\/$/, '') ? 'page' : undefined}>{label}</a>
+      ))}
+    </nav>
+    <span class="header-note"><span class="status-dot"></span>Independent imagination</span>
+    <details class="mobile-menu">
+      <summary>
+        <span>Menu</span>
+        <span class="menu-glyph" aria-hidden="true"><i></i><i></i></span>
+      </summary>
+      <nav aria-label="Mobile navigation">
+        <a href="/" aria-current={path === '/' ? 'page' : undefined}>Home</a>
+        {navigation.map(({ label, href }) => (
+          <a href={href} aria-current={path === href.replace(/\/$/, '') ? 'page' : undefined}>{label}</a>
+        ))}
+      </nav>
+    </details>
+  </div>
+</header>

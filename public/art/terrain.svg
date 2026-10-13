@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#1d2525"/><stop offset="1" stop-color="#8a9280"/></linearGradient>
+    <linearGradient id="rock" x2="1" y2=".3"><stop stop-color="#101a18"/><stop offset=".55" stop-color="#394a41"/><stop offset="1" stop-color="#69735e"/></linearGradient>
+    <linearGradient id="ground" x2="0" y2="1"><stop stop-color="#555e4a"/><stop offset="1" stop-color="#111b17"/></linearGradient>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".6" numOctaves="3" seed="9"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".07"/></feComponentTransfer><feBlend in="SourceGraphic" mode="soft-light"/></filter>
+  </defs>
+  <g filter="url(#grain)"><path fill="url(#sky)" d="M0 0h1200v900H0z"/><circle cx="885" cy="229" r="83" fill="#c1c2aa" opacity=".6"/><path d="m0 560 153-37 182 38 234-62 257 43 204-16 170 47v327H0z" fill="url(#ground)"/><path d="m265 670 61-393 107-130 89 84 72 410-96 34z" fill="url(#rock)"/><path d="m433 147 20 262 45 266 96-34-72-410z" fill="#7c8066" opacity=".2"/><path d="m752 579 41-212 61-54 43 109 40 153-88 23z" fill="url(#rock)"/><path d="m0 756 183-29 198 49 236-50 193 80 390-50v144H0z" fill="#17231c"/><path d="m781 900-75-77-156-89" stroke="#a1a187" stroke-opacity=".22" stroke-width="2"/></g>
+</svg>
