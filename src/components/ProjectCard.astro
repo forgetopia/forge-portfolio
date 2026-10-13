@@ -22,7 +22,7 @@ const Heading = headingLevel;
   data-categories={categories.join(' ')}
   data-preview-state={previewVideo ? 'idle' : undefined}
 >
-  <a class="project-card-link" href={projectHref(project.data.slug)} aria-label={`View project: ${title}`}>
+  <a class="project-card-link" href={projectHref(project.data.slug)}>
     <div class="project-card-media" style={`--project-media-ratio: ${cover.width} / ${cover.height};`}>
       <img
         src={cover.src}

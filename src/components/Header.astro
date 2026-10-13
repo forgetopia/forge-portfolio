@@ -1,13 +1,18 @@
 ---
 import { navigation, site } from '../data/site';
 
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-const currentState = (href: string) => path === href.replace(/\/$/, '') ? 'page' : path.startsWith(href) ? 'true' : undefined;
+const normalizePath = (value: string) => value.replace(/\/+$/, '') || '/';
+const path = normalizePath(Astro.url.pathname);
+const currentState = (href: string) => {
+  const target = normalizePath(href);
+  if (path === target) return 'page';
+  return target !== '/' && path.startsWith(`${target}/`) ? 'true' : undefined;
+};
 ---
 
 <header class="site-header">
   <div class="site-shell header-inner">
-    <a class="wordmark" href="/" aria-label="FORGE — Home">
+    <a class="wordmark" href="/">
       <span class="wordmark-name">{site.name}<span class="wordmark-dot" aria-hidden="true">+</span></span>
       <span class="wordmark-caption">{site.tagline}</span>
     </a>
@@ -17,12 +22,12 @@ const currentState = (href: string) => path === href.replace(/\/$/, '') ? 'page'
       ))}
     </nav>
     <span class="header-note"><span class="status-dot"></span>Independent imagination</span>
-    <details class="mobile-menu">
-      <summary>
+    <details class="mobile-menu" data-mobile-menu>
+      <summary aria-controls="mobile-navigation">
         <span>Menu</span>
         <span class="menu-glyph" aria-hidden="true"><i></i><i></i></span>
       </summary>
-      <nav aria-label="Mobile navigation">
+      <nav id="mobile-navigation" aria-label="Mobile navigation">
         <a href="/" aria-current={path === '/' ? 'page' : undefined}>Home</a>
         {navigation.map(({ label, href }) => (
           <a href={href} aria-current={currentState(href)}>{label}</a>
@@ -31,3 +36,9 @@ const currentState = (href: string) => path === href.replace(/\/$/, '') ? 'page'
     </details>
   </div>
 </header>
+
+<script>
+  import { initMobileNavigation } from '../scripts/mobile-navigation';
+
+  initMobileNavigation();
+</script>

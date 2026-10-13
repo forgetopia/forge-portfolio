@@ -32,7 +32,7 @@ const galleryId = `stills-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
             data-image-height={image.height}
             data-image-caption={image.caption ?? image.alt}
             data-image-placeholder={String(image.placeholder)}
-            aria-label={`Open still frame ${index + 1}: ${image.caption ?? image.alt}`}
+            aria-label={`Open still frame ${index + 1}: ${image.caption ?? image.alt}${image.placeholder ? ' · Placeholder image' : ''}`}
             style={`--still-ratio: ${image.width} / ${image.height};`}
           >
             <img

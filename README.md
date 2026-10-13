@@ -52,6 +52,17 @@ npx playwright install chromium
 
 On Linux, use `npx playwright install --with-deps chromium` if system browser libraries are missing and your environment permits installing them. An existing compatible Chromium can be used with `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:e2e`. The browser suite serves the existing `dist/` output with its own local static server on port `4173`, so build first. Set `PORTFOLIO_TEST_PORT` if that port is occupied. `npm run test` is an alias for the unit suite.
 
+Chromium remains the default and the only browser required by GitHub CI. To run another engine locally when its browser binaries and system libraries are available, install and select it explicitly:
+
+```sh
+npx playwright install firefox
+PORTFOLIO_TEST_BROWSER=firefox npm run test:e2e
+npx playwright install webkit
+PORTFOLIO_TEST_BROWSER=webkit npm run test:e2e
+```
+
+`PORTFOLIO_TEST_BROWSER` accepts `chromium`, `firefox`, or `webkit`; the executable override applies only to Chromium. Report unsupported engines as untested rather than assuming that Chromium results establish compatibility.
+
 GitHub Actions runs type checks, unit tests, the production build, Wrangler deployment validation, and Chromium browser tests for pull requests and pushes to `main`. Failed browser runs upload their traces for investigation.
 
 ## Pages and customization
@@ -65,6 +76,8 @@ GitHub Actions runs type checks, unit tests, the production build, Wrangler depl
 | `/contact/` | Contact page prepared for real contact details |
 
 Shared page structure lives in `src/layouts/` and reusable interface elements in `src/components/`. Update the studio identity, site metadata, and contact configuration in `src/data/site.ts`. The global stylesheet defines the design tokens and shared visual treatments.
+
+Typography remains self-hosted: `src/styles/fonts.css` declares the Manrope variable font, while `src/layouts/BaseLayout.astro` imports Cormorant Garamond normal and italic and preloads its normal display face. The current Latin subsets cover the site's English content. Before publishing a translation or names using other scripts, add the matching self-hosted subsets and Unicode ranges, then check glyph coverage and font loading. Avoid importing every subset unnecessarily.
 
 The five demonstration records are **The Long Night**, **The Last Rune Engine**, **Dragon Resonance**, **Isekai Live-Action**, and **Surreal Universe**. These are explicitly labeled sample records with placeholder media; their text and categories demonstrate the content model and do not claim original artwork or completed productions. Gallery filters work in the browser, while all projects and detail links remain available without JavaScript.
 
@@ -169,6 +182,8 @@ bash scripts/generate-placeholder-media.sh
 The helper uses a supported local sans-serif font. If none is available, set `FORGE_PLACEHOLDER_FONT` to the path of a local TrueType font before running it. Review regenerated assets before committing them.
 
 Card previews attach and load footage only on eligible desktop mouse hover. Touch users, reduced-motion users, and data-saving users keep static poster cards. Only one card preview plays at a time; leaving a card or hiding it stops, resets, and releases its clip. Videos never preload across the entire grid. Project players use native controls and wait for visitor interaction; portrait footage retains its aspect ratio. Loading or playback failures keep a useful poster and provide a retry path.
+
+For real assets, encode a separate, short, muted `previewVideo` instead of pointing card previews at the full `video` file. The sample records share their tiny five-second test-pattern clips only because no original footage is supplied. Keep posters and explicit dimensions, and verify preview transfers on a slower connection before publishing large assets.
 
 Still images open a native-dialog fullscreen viewer with touch-friendly controls, arrow-key navigation, Escape to close, focus trapping, and focus restoration to the triggering image. Images keep their original aspect ratios. Without JavaScript, image links remain usable and project videos retain native controls; the hero keeps its poster fallback. No client framework or server rendering is required.
 

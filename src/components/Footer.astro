@@ -20,7 +20,7 @@ const { showInvitation = true } = Astro.props;
     </div>
   )}
   <div class="site-shell footer-bottom">
-    <a class="footer-brand" href="/" aria-label="FORGE — Home">{site.name}<span> / {site.tagline}</span></a>
+    <a class="footer-brand" href="/" aria-label={`${site.name} / ${site.tagline} — Home`}>{site.name}<span> / {site.tagline}</span></a>
     <nav aria-label="Footer navigation">
       {navigation.map(({ label, href }) => <a href={href}>{label}</a>)}
     </nav>

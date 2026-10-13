@@ -18,8 +18,8 @@ export function initProjectPlayers() {
     let timeout: ReturnType<typeof setTimeout> | undefined;
     const source = video.getAttribute('src') ?? '';
     const title = start.dataset.filmTitle ?? 'project film';
-    const canRestorePlayerFocus = () => player.contains(document.activeElement)
-      && !document.querySelector('dialog[open]') && !document.hidden;
+    const contextBlocksPlayback = () => document.hidden || Boolean(document.querySelector('dialog[open]'));
+    const canRestorePlayerFocus = () => player.contains(document.activeElement) && !contextBlocksPlayback();
 
     const clearTimeoutForLoad = () => {
       if (timeout !== undefined) clearTimeout(timeout);
@@ -70,10 +70,11 @@ export function initProjectPlayers() {
     };
 
     const play = async () => {
+      if (contextBlocksPlayback()) return;
       const currentRequest = ++request;
       intendedPlayback = true;
       video.hidden = false;
-      if (!document.querySelector('dialog[open]') && !document.hidden) video.focus({ preventScroll: true });
+      video.focus({ preventScroll: true });
       poster.hidden = true;
       retry.hidden = true;
       overlay.hidden = true;
@@ -82,7 +83,7 @@ export function initProjectPlayers() {
       try {
         await video.play();
         // A play promise can complete after a visibility change or an overlay opened.
-        if (currentRequest !== request && !intendedPlayback) video.pause();
+        if ((currentRequest !== request && !intendedPlayback) || contextBlocksPlayback()) video.pause();
       } catch (error) {
         if (currentRequest !== request || !intendedPlayback) return;
         if (error instanceof DOMException && error.name === 'NotAllowedError') {
@@ -115,7 +116,7 @@ export function initProjectPlayers() {
       void play();
     });
     video.addEventListener('play', () => {
-      if (document.hidden || player.dataset.playerState === 'error') {
+      if (contextBlocksPlayback() || player.dataset.playerState === 'error') {
         video.pause();
         return;
       }
@@ -124,7 +125,7 @@ export function initProjectPlayers() {
       loading();
     });
     video.addEventListener('playing', () => {
-      if (!intendedPlayback || document.hidden || player.dataset.playerState === 'error') {
+      if (!intendedPlayback || contextBlocksPlayback() || player.dataset.playerState === 'error') {
         video.pause();
         return;
       }
