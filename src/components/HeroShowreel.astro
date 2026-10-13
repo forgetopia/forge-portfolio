@@ -27,6 +27,7 @@ const { poster, video, autoplay } = showreel;
       muted
       loop
       playsinline
+      crossorigin={video.src.startsWith('https://') || video.captions.some((caption) => caption.src.startsWith('https://')) ? 'anonymous' : undefined}
       tabindex="-1"
     >
       {video.captions.map((caption, index) => <track kind="captions" data-src={caption.src} srclang={caption.srclang} label={caption.label} default={video.hasAudio && index === 0} />)}

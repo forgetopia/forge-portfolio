@@ -1,15 +1,15 @@
 # FORGE — Visual Universe
 
-A cinematic portfolio for AI filmmaking and digital art, built on a restrained dark design system. Portfolio records drive a responsive gallery, category filters, featured homepage projects, and individual project pages with video, stills, and a fullscreen image viewer.
+A cinematic portfolio for AI filmmaking and digital art, built on a restrained dark design system. Editable data drives the creative identity, collaboration page, responsive gallery, and project viewers with video, stills, and a fullscreen image lightbox.
 
 ## Stack
 
-- Astro with strict TypeScript and static site generation
+- Astro 7 with strict TypeScript and static site generation
 - Tailwind CSS 4 through `@tailwindcss/vite`
 - Self-hosted Cormorant Garamond and Manrope fonts
 - An obsidian, graphite, ivory, and muted bronze design system
 
-The site renders static HTML to `dist/` and deploys as static assets to the existing `forge-portfolio` Cloudflare Worker. No API keys, backend services, Cloudflare adapter, or runtime rendering are required to develop and build the site. Deployment configuration lives in `wrangler.jsonc`; Cloudflare authentication is supplied separately by the connected build platform or your authenticated Wrangler session.
+The site renders static HTML to `dist/` and deploys as assets to the existing `forge-portfolio` Cloudflare Worker. Development and builds need no API keys, backend services, adapter, or runtime rendering. Deployment authentication is supplied by the connected Cloudflare build platform or an authenticated Wrangler session.
 
 ## Local development
 
@@ -22,37 +22,39 @@ npm run dev -- --host 0.0.0.0
 
 Open `http://localhost:4321`. In a cloud workspace, open or forward port `4321` using the workspace's preview controls.
 
-Local development and preview servers normally run in the foreground; stop them with Ctrl+C. Astro 7 may automatically run servers in the background in cloud agent sessions. For those sessions, check or stop them with `npm run dev -- status`, `npm run dev -- stop`, `npm run preview -- status`, and `npm run preview -- stop`. Stop the preview before rebuilding `dist/`. If a port is occupied, use the port Astro reports or specify another with `--port`.
+Local servers normally run in the foreground; stop them with Ctrl+C. Astro 7 may background servers in cloud agent sessions. Check or stop those sessions with `npm run dev -- status`, `npm run dev -- stop`, `npm run preview -- status`, and `npm run preview -- stop`. Stop a production preview before rebuilding `dist/`. If a port is occupied, use the port Astro reports or specify another with `--port`.
 
 | Command | Purpose |
 | --- | --- |
 | `npm run dev` | Start the Astro development server |
 | `npm run check` | Run Astro and TypeScript diagnostics |
 | `npm run build` | Generate the production site in `dist/` |
-| `npm run test:unit` | Validate project schemas, media metadata, and portfolio content |
-| `npm run test:e2e` | Check the built site and media interactions with Playwright |
-| `npm run preview -- --host 0.0.0.0` | Preview the production build on port `4321` |
+| `npm run test:unit` | Validate content, identity, media policy, and metadata |
+| `npm run test:e2e` | Check the built site with Playwright |
+| `npm run preview -- --host 0.0.0.0` | Preview the production build locally |
 
 Before opening a pull request, run:
 
 ```sh
+npm ci
 npm run check
 npm run test:unit
 npm run build
 npm run test:e2e
+npx wrangler deploy --dry-run
 ```
 
-To preview the generated production site, run `npm run build` followed by `npm run preview -- --host 0.0.0.0`.
+To inspect production output locally, build first, then run `npm run preview -- --host 0.0.0.0`.
 
-Install Chromium for the browser checks once per environment:
+Install Chromium for browser checks once per environment:
 
 ```sh
 npx playwright install chromium
 ```
 
-On Linux, use `npx playwright install --with-deps chromium` if system browser libraries are missing and your environment permits installing them. An existing compatible Chromium can be used with `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:e2e`. The browser suite serves the existing `dist/` output with its own local static server on port `4173`, so build first. Set `PORTFOLIO_TEST_PORT` if that port is occupied. `npm run test` is an alias for the unit suite.
+On Linux, use `npx playwright install --with-deps chromium` when system libraries are missing and the environment permits installation. An existing compatible browser can be selected with `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:e2e`. The suite serves the current `dist/` on port `4173`, so build first; set `PORTFOLIO_TEST_PORT` if occupied. `npm run test` aliases the unit suite.
 
-Chromium remains the default and the only browser required by GitHub CI. To run another engine locally when its browser binaries and system libraries are available, install and select it explicitly:
+Chromium is the default and the only browser required by CI. Optional local engines require their own binaries and system libraries:
 
 ```sh
 npx playwright install firefox
@@ -61,149 +63,42 @@ npx playwright install webkit
 PORTFOLIO_TEST_BROWSER=webkit npm run test:e2e
 ```
 
-`PORTFOLIO_TEST_BROWSER` accepts `chromium`, `firefox`, or `webkit`; the executable override applies only to Chromium. Report unsupported engines as untested rather than assuming that Chromium results establish compatibility.
+The executable override applies only to Chromium. Report unsupported engines as untested. GitHub Actions runs diagnostics, unit tests, the production build, Wrangler packaging validation, and Chromium browser tests. Failed browser runs upload traces.
 
-GitHub Actions runs type checks, unit tests, the production build, Wrangler deployment validation, and Chromium browser tests for pull requests and pushes to `main`. Failed browser runs upload their traces for investigation.
-
-## Pages and customization
+## Content and customization
 
 | Route | Content |
 | --- | --- |
-| `/` | Cinematic showreel hero, featured portfolio projects, and studio introduction |
-| `/work/` | Responsive portfolio grid with eight category filter options |
-| `/work/[slug]/` | Static project viewer with cover, video, synopsis, direction, credits, stills, and adjacent projects |
-| `/about/` | Studio identity and creative approach |
-| `/contact/` | Contact page prepared for real contact details |
+| `/` | Cinematic showreel, featured public projects, and studio introduction |
+| `/work/` | Public portfolio with eight category filter options |
+| `/work/[slug]/` | Published or legacy sample project viewer |
+| `/about/` | Editable creative identity, philosophy, disciplines, and workflow |
+| `/contact/` | Collaboration introduction, approved services, and configured contact links |
+| `/sitemap.xml` | Core routes and public projects using the configured production origin |
 
-Shared page structure lives in `src/layouts/` and reusable interface elements in `src/components/`. Update the studio identity, site metadata, and contact configuration in `src/data/site.ts`. The global stylesheet defines the design tokens and shared visual treatments.
+Routine updates belong in data files:
 
-Typography remains self-hosted: `src/styles/fonts.css` declares the Manrope variable font, while `src/layouts/BaseLayout.astro` imports Cormorant Garamond normal and italic and preloads its normal display face. The current Latin subsets cover the site's English content. Before publishing a translation or names using other scripts, add the matching self-hosted subsets and Unicode ranges, then check glyph coverage and font loading. Avoid importing every subset unnecessarily.
+- [Content authoring guide](docs/content-authoring.md): projects, publication, identity, About, Contact, and review checklist.
+- [Media integration guide](docs/media-integration.md): local assets, approved CDN origins, films, previews, showreel, accessibility, and playback requirements.
+- [Reusable draft project template](docs/templates/project.json): copy into the collection and edit before publishing.
 
-The five demonstration records are **The Long Night**, **The Last Rune Engine**, **Dragon Resonance**, **Isekai Live-Action**, and **Surreal Universe**. These are explicitly labeled sample records with placeholder media; their text and categories demonstrate the content model and do not claim original artwork or completed productions. Gallery filters work in the browser, while all projects and detail links remain available without JavaScript.
+The five existing demonstration records remain **The Long Night**, **The Last Rune Engine**, **Dragon Resonance**, **Isekai Live-Action**, and **Surreal Universe**. Their sample labels and media placeholders do not claim completed original work. Explicit drafts are excluded from public grids, featured selection, adjacent navigation, detail routes, and the sitemap. New non-sample records without a publication status also stay draft; legacy samples without a status remain visible for compatibility.
 
-Contact information is deliberately unconfigured; supply real details before publishing a live contact channel.
+`src/data/site.ts` holds the identity, About and Contact content, and verified production origin: `https://forge-portfolio.digivism9.workers.dev`. Personal identity, email, social profiles, services, capabilities, and availability remain unconfigured until approved details are supplied. `src/data/media.ts` trusts no external media origins by default; the production site origin does not automatically approve a CDN.
 
-## Portfolio content
+Portfolio schema and queries live in `src/lib/project-schema.ts` and `src/lib/projects.ts`; records live in `src/content/projects/`. The collection validates metadata during sync/build. Invalid fields, duplicate slugs, and filename/slug mismatches fail validation.
 
-Astro's `projects` Content Collection is defined in `src/content.config.ts`. JSON records live in `src/content/projects/`, the shared TypeScript/Zod schema lives in `src/lib/project-schema.ts`, and queries and route helpers live in `src/lib/projects.ts`. Invalid metadata fails validation rather than silently publishing malformed projects.
-
-Add a file whose name matches its unique lowercase kebab-case `slug`. For example, `src/content/projects/my-sample-project.json`:
-
-```json
-{
-  "slug": "my-sample-project",
-  "title": "My Sample Project",
-  "summary": "A sample record demonstrating the portfolio structure.",
-  "description": [
-    "Demonstration content. Original artwork and verified project details have not been supplied."
-  ],
-  "categories": ["ai-films"],
-  "cover": {
-    "src": "/placeholders/landscape.svg",
-    "alt": "Labeled landscape image placeholder; no artwork supplied.",
-    "width": 1600,
-    "height": 1000,
-    "orientation": "landscape",
-    "placeholder": true
-  },
-  "featured": false,
-  "order": 6,
-  "sample": true
-}
-```
-
-Titles, summaries, image alternative text, and every description paragraph must be nonempty. Choose at least one category; duplicate or unknown category IDs are rejected:
-
-| Category ID | Filter label |
-| --- | --- |
-| `ai-films` | AI Films |
-| `fantasy-live-action` | Fantasy Live-Action |
-| `action-combat` | Action & Combat |
-| `fashion-editorial` | Fashion Editorial |
-| `ai-photography` | AI Photography |
-| `surreal-experimental` | Surreal & Experimental |
-| `commercial` | Commercial |
-
-**All Works** displays the complete collection and is not a project category. Multiple categories let a project appear in multiple filters. An empty category displays an explanatory empty state.
-
-`featured: true` includes a project on the homepage. Projects are sorted by ascending nonnegative integer `order`, then by slug for consistent ordering. These fields default to `false` and `0` respectively when omitted.
-
-Use local image paths under `public/placeholders/`, `public/images/`, or `public/art/` and reference them as `/placeholders/...`, `/images/...`, or `/art/...`. Set the actual positive integer dimensions: landscape images must be wider than tall, and portrait images taller than wide. The included portrait placeholder is `/placeholders/portrait.svg` at `1000 × 1400`; set `orientation` to `portrait` when using it. Project cards and stills preserve both media formats. Images may also have an optional nonempty `caption`.
-
-Keep `sample: true` while a record contains demonstration text or unverified project details. Keep `cover.placeholder: true` for placeholder images and use alternative text that identifies them. Only change these flags after replacing their content with approved project information and supplied artwork. Never invent images, credits, clients, or production claims.
-
-Run the validation and test commands after editing content. A successful build generates the corresponding `/work/my-sample-project/` page automatically; no route file per project is needed.
-
-## Cinematic media
-
-The hero's media and optional autoplay flag live in `src/data/showreel.ts`. The default is `autoplay: false`: visitors choose when to play. Opt-in autoplay remains muted and is gated by reduced-motion, data-saving, and desktop pointer preferences. An accessible play/pause control and mute control accompany the hero; the committed demonstration clip has no audio. The existing high-resolution `/art/horizon.svg` is explicitly labeled as a poster placeholder until supplied showreel artwork is available.
-
-Project records may add the following fields without changing their route:
-
-| Field | Content |
-| --- | --- |
-| `video` | Main project video using the media metadata shown below |
-| `previewVideo` | Short muted card preview using the same metadata |
-| `synopsis` | Nonempty synopsis; existing description content remains available |
-| `creativeDirection` | Array of nonempty direction paragraphs |
-| `credits` | Array of `{ "role": "…", "name": "…" }` entries with verified information |
-| `stills` | Array using the same image metadata as `cover`, with optional captions |
-
-The schema defaults direction, credits, and stills to empty arrays. The sample credits remain empty because no verified production credits have been supplied. Missing video and still fields remain valid, so projects can be image-only.
-
-For example, merge this optional `video` field into a sample record:
-
-```json
-{
-  "video": {
-    "src": "/media/placeholder-landscape.mp4",
-    "type": "video/mp4",
-    "width": 1280,
-    "height": 800,
-    "orientation": "landscape",
-    "placeholder": true,
-    "hasAudio": false,
-    "captions": [
-      { "src": "/media/placeholder-en.vtt", "srclang": "en", "label": "English" }
-    ],
-    "transcript": "A silent test pattern labeled PLACEHOLDER CLIP and NO ORIGINAL FOOTAGE."
-  }
-}
-```
-
-Videos must be local `.mp4` or `.webm` files under `public/media/`; the MIME type must match the extension. Dimensions and orientation are validated as they are for images. Set `hasAudio: true` for audio-bearing footage and supply at least one caption track, stored as a local `.vtt` file under `public/media/`. Include accurate alternative text, captions, and a transcript describing meaningful visual content. Keep `placeholder: true` for demonstration footage.
-
-The committed five-second clips are generated neutral test patterns with burned-in **PLACEHOLDER CLIP / NO ORIGINAL FOOTAGE** labels. They contain no original artwork or audio. The landscape clip is `1280 × 800`; the portrait clip is `640 × 896`. Their shared English WebVTT track describes the test pattern. Builds need no FFmpeg because the assets are committed. To regenerate the clips during asset authoring, install FFmpeg with `libx264` and `drawtext`, then run:
-
-```sh
-bash scripts/generate-placeholder-media.sh
-```
-
-The helper uses a supported local sans-serif font. If none is available, set `FORGE_PLACEHOLDER_FONT` to the path of a local TrueType font before running it. Review regenerated assets before committing them.
-
-Card previews attach and load footage only on eligible desktop mouse hover. Touch users, reduced-motion users, and data-saving users keep static poster cards. Only one card preview plays at a time; leaving a card or hiding it stops, resets, and releases its clip. Videos never preload across the entire grid. Project players use native controls and wait for visitor interaction; portrait footage retains its aspect ratio. Loading or playback failures keep a useful poster and provide a retry path.
-
-For real assets, encode a separate, short, muted `previewVideo` instead of pointing card previews at the full `video` file. The sample records share their tiny five-second test-pattern clips only because no original footage is supplied. Keep posters and explicit dimensions, and verify preview transfers on a slower connection before publishing large assets.
-
-Still images open a native-dialog fullscreen viewer with touch-friendly controls, arrow-key navigation, Escape to close, focus trapping, and focus restoration to the triggering image. Images keep their original aspect ratios. Without JavaScript, image links remain usable and project videos retain native controls; the hero keeps its poster fallback. No client framework or server rendering is required.
-
-After replacing media, run the full check, unit-test, build, and browser-test sequence above. The browser suite covers media controls, lazy preview loading, pointer and preference fallbacks, playback failures, lightbox keyboard/focus behavior, and responsive presentation alongside the existing gallery checks.
+Typography remains self-hosted. The current Latin subsets cover English content; add the matching subsets and Unicode ranges before publishing other scripts and check glyph coverage. Preserve the existing font families and visual tokens. The historical [PR 04 QA report](docs/pr04-qa.md) records the responsive, accessibility, and performance baseline and its limitations.
 
 ## Deployment compatibility
 
-Keep the existing Cloudflare Workers build integration using `npm run build` and `dist/`. The repository pins Wrangler 4.149.0 and defines the existing Worker name `forge-portfolio`, compatibility date `2026-10-06`, and static assets directory `./dist` in `wrangler.jsonc`. The date matches Wrangler's bundled runtime. There is no Worker JavaScript entry point or Astro adapter because every page is statically generated.
+Keep the connected Cloudflare Workers build using `npm run build` and `dist/`. `wrangler.jsonc` retains Worker name `forge-portfolio`, compatibility date `2026-10-06`, static assets directory `./dist`, and top-level `previews: {}`. Wrangler remains pinned to 4.149.0. An Astro adapter or Worker JavaScript entry point is unnecessary for the static site.
 
-The top-level `previews: {}` enables the connected Cloudflare build's `npx wrangler preview` command. Preview deployments use the same static assets configuration; production remains compatible with `npx wrangler deploy`. Keep account credentials, custom domains, and platform build settings in Cloudflare rather than committing them.
+After building, `npx wrangler deploy --dry-run` validates packaging without publishing. With Cloudflare authentication, `npx wrangler deploy` publishes production and `npx wrangler preview` creates a preview deployment. Wrangler preview has no dry-run option. Astro's `npm run preview` starts a local server and does not deploy.
 
-After `npm run build`, validate production deployment packaging without publishing:
+The configured production origin supplies canonical URLs, social sharing URLs, and absolute sitemap locations. Update `site.productionOrigin` only to an owner-verified HTTPS origin after a domain change. Setting it to `null` omits origin-dependent metadata and produces an empty valid sitemap; do not guess a replacement hostname. No credentials or secrets belong in source control.
 
-```sh
-npx wrangler deploy --dry-run
-```
-
-With Cloudflare authentication, deploy using `npx wrangler deploy` for production or `npx wrangler preview` for a preview. Wrangler preview has no dry-run option and creates a preview deployment. The Astro `npm run preview` command is a local server and does not deploy to Cloudflare.
-
-Cloudflare Pages is also a supported optional target with the following settings:
+Cloudflare Pages remains an optional static target:
 
 | Setting | Value |
 | --- | --- |
@@ -212,5 +107,3 @@ Cloudflare Pages is also a supported optional target with the following settings
 | Build output directory | `dist` |
 | Root directory | Repository root |
 | Environment variable | `NODE_VERSION=22.23.3` |
-
-Once the public domain is confirmed, add Astro's `site` option in `astro.config.mjs` before introducing canonical URLs or a sitemap.

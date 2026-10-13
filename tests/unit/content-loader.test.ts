@@ -23,6 +23,17 @@ async function buildInvalidFixture(
       )),
       symlink(join(repository, 'node_modules'), join(directory, 'node_modules'), 'dir'),
     ]);
+    // Keep parallel fixture builds from sharing the symlinked dependency caches.
+    const baseConfig = await readFile(join(directory, 'astro.config.mjs'), 'utf8');
+    await writeFile(join(directory, 'astro.fixture-base.config.mjs'), baseConfig);
+    await writeFile(join(directory, 'astro.config.mjs'), `
+      import configuration from './astro.fixture-base.config.mjs';
+      export default {
+        ...configuration,
+        cacheDir: './.fixture-astro-cache',
+        vite: { ...configuration.vite, cacheDir: './.fixture-vite-cache' },
+      };
+    `);
     await changeContent(join(directory, 'src/content/projects'));
 
     let failedBuild = false;

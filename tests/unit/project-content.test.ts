@@ -104,10 +104,10 @@ test('optional metadata has predictable defaults for new unfeatured project reco
 
 test('collection ordering is deterministic and featured selection preserves editorial order without mutation', () => {
   const entries = [
-    { data: { slug: 'second', order: 2, featured: true } },
-    { data: { slug: 'unfeatured', order: 0, featured: false } },
-    { data: { slug: 'beta', order: 1, featured: true } },
-    { data: { slug: 'alpha', order: 1, featured: true } },
+    { data: { slug: 'second', order: 2, featured: true, status: 'published' as const } },
+    { data: { slug: 'unfeatured', order: 0, featured: false, status: 'published' as const } },
+    { data: { slug: 'beta', order: 1, featured: true, status: 'published' as const } },
+    { data: { slug: 'alpha', order: 1, featured: true, status: 'published' as const } },
   ];
   const original = structuredClone(entries);
   assert.deepEqual(sortProjects(entries).map(({ data }) => data.slug), ['unfeatured', 'alpha', 'beta', 'second']);

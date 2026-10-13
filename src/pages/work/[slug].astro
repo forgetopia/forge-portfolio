@@ -7,6 +7,7 @@ import StillGallery from '../../components/StillGallery.astro';
 import { categoryLabel, getProjects, projectHref } from '../../lib/projects';
 import '../../styles/portfolio.css';
 import '../../styles/project-media.css';
+import '../../styles/project-editorial.css';
 
 export const getStaticPaths = (async () => {
   const projects = await getProjects();
@@ -23,17 +24,34 @@ export const getStaticPaths = (async () => {
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { project, previousProject, nextProject } = Astro.props;
-const { title, summary, description, categories, cover, sample, video, synopsis, creativeDirection, credits, stills } = project.data;
+const {
+  title, subtitle, summary, description, categories, cover, sample, video, synopsis,
+  creativeDirection, credits, stills, year, format, duration, aspectRatio, tools = [],
+  productionRole, overview, productionWorkflow = [],
+} = project.data;
+const projectFacts = [
+  { label: 'Year', value: year?.toString() },
+  { label: 'Format', value: format },
+  { label: 'Duration', value: duration },
+  { label: 'Aspect ratio', value: aspectRatio },
+  { label: 'Production role', value: productionRole },
+].filter(({ value }) => value !== undefined);
 ---
 
-<BaseLayout title={title} description={summary}>
+<BaseLayout title={title} description={summary} shareImage={cover}>
   <article class="site-shell project-detail">
     <a class="text-link project-back" href="/work/"><span aria-hidden="true">←</span>All works</a>
     <header class="project-detail-header">
       <p class="eyebrow">{categories.map(categoryLabel).join(' / ')}</p>
       <h1>{title}</h1>
+      {subtitle && <p class="project-detail-subtitle">{subtitle}</p>}
       <p class="project-detail-summary">{summary}</p>
       {sample && <p class="project-detail-notice"><span class="status-dot"></span>Sample project · Details and category assignments are illustrative.</p>}
+      {(projectFacts.length > 0 || tools.length > 0) && <section class="project-facts" aria-labelledby="project-facts-heading">
+        <h2 id="project-facts-heading" class="sr-only">Project details</h2>
+        {projectFacts.length > 0 && <dl>{projectFacts.map(({ label, value }) => <div><dt>{label}</dt><dd>{value}</dd></div>)}</dl>}
+        {tools.length > 0 && <div class="project-tools"><h3>Tools used</h3><ul>{tools.map((tool) => <li>{tool}</li>)}</ul></div>}
+      </section>}
     </header>
     <figure class:list={['project-detail-media', `project-detail-media--${cover.orientation}`]}>
       <div class="project-detail-frame" style={`--project-media-ratio: ${cover.width} / ${cover.height};`}>
@@ -46,10 +64,18 @@ const { title, summary, description, categories, cover, sample, video, synopsis,
       <div><p class="eyebrow">The story</p><h2 id="overview-heading">Synopsis</h2></div>
       <div class="project-prose">{synopsis && <p>{synopsis}</p>}{description.map((paragraph) => <p>{paragraph}</p>)}</div>
     </section>
-    {video && <ProjectPlayer video={video} poster={cover} title={title} />}
+    {overview && <section class="project-editorial-section" aria-labelledby="project-overview-heading">
+      <div><p class="eyebrow">The project</p><h2 id="project-overview-heading">Overview</h2></div>
+      <div class="project-prose"><p>{overview}</p></div>
+    </section>}
+    {video && <ProjectPlayer video={video} poster={video.poster ?? cover} title={title} />}
     {creativeDirection.length > 0 && <section class="project-direction-section" aria-labelledby="direction-heading">
       <div><p class="eyebrow">The perspective</p><h2 id="direction-heading">Creative direction</h2></div>
       <div class="project-prose">{creativeDirection.map((paragraph) => <p>{paragraph}</p>)}</div>
+    </section>}
+    {productionWorkflow.length > 0 && <section class="project-editorial-section" aria-labelledby="workflow-heading">
+      <div><p class="eyebrow">The process</p><h2 id="workflow-heading">Production workflow</h2></div>
+      <ol class="project-workflow">{productionWorkflow.map((step) => <li>{step}</li>)}</ol>
     </section>}
     <section class="project-credits" aria-labelledby="credits-heading">
       <p class="eyebrow">The collaborators</p><h2 id="credits-heading">Credits</h2>

@@ -1,0 +1,23 @@
+/* Optional author-supplied project information extends the existing editorial layout. */
+.project-detail-subtitle { max-width: 850px; margin-top: 18px; color: var(--color-bronze); font-family: var(--font-display); font-size: clamp(24px, 3vw, 38px); font-style: italic; line-height: 1.25; overflow-wrap: anywhere; }
+.project-facts { margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--line); }
+.project-facts dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 24px 32px; margin: 0; }
+.project-facts dt, .project-tools h3 { color: var(--color-bronze); font-family: var(--font-sans); font-size: 10px; font-weight: 400; line-height: 1.6; letter-spacing: .08em; text-transform: uppercase; }
+.project-facts dd { margin: 8px 0 0; color: var(--color-ivory); font-size: 12px; line-height: 1.85; overflow-wrap: anywhere; }
+.project-tools { margin-top: 26px; }
+.project-facts > h2 + .project-tools { margin-top: 0; }
+.project-tools ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+.project-tools li { max-width: 100%; padding: 6px 10px; border: 1px solid var(--line); color: var(--color-muted); font-size: 11px; line-height: 1.7; overflow-wrap: anywhere; }
+.project-editorial-section { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10%; padding-block: 52px; border-top: 1px solid var(--line); }
+.project-editorial-section h2 { margin-top: 18px; font-family: var(--font-display); font-size: clamp(30px, 3.4vw, 46px); font-weight: 400; line-height: 1.12; letter-spacing: -.025em; overflow-wrap: anywhere; }
+.project-workflow { margin: 0; padding-left: 22px; color: var(--color-muted); font-size: 13px; line-height: 1.95; }
+.project-workflow li { padding-left: 8px; overflow-wrap: anywhere; }
+.project-workflow li + li { margin-top: 18px; }
+.project-workflow li::marker { color: var(--color-bronze); }
+
+@media (max-width: 640px) {
+  .project-facts { margin-top: 28px; padding-top: 22px; }
+  .project-facts dl { gap: 20px; }
+  .project-editorial-section { grid-template-columns: 1fr; gap: 26px; padding-block: 36px; }
+  .project-workflow { font-size: 12px; }
+}

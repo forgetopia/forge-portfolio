@@ -1,0 +1,58 @@
+{
+  "slug": "my-project-draft",
+  "title": "My Project Draft",
+  "summary": "Draft sample record awaiting approved project information and media.",
+  "description": [
+    "This draft demonstrates the portfolio content structure. Replace this text with approved project details before publication."
+  ],
+  "categories": ["ai-films"],
+  "status": "draft",
+  "sample": true,
+  "featured": false,
+  "order": 6,
+  "tools": [],
+  "productionWorkflow": [],
+  "creativeDirection": [],
+  "credits": [],
+  "cover": {
+    "src": "/placeholders/landscape.svg",
+    "alt": "Labeled landscape image placeholder; approved cover artwork has not been supplied.",
+    "width": 1600,
+    "height": 1000,
+    "orientation": "landscape",
+    "placeholder": true
+  },
+  "video": {
+    "src": "/media/placeholder-landscape.mp4",
+    "type": "video/mp4",
+    "width": 1280,
+    "height": 800,
+    "orientation": "landscape",
+    "placeholder": true,
+    "hasAudio": false,
+    "captions": [
+      { "src": "/media/placeholder-en.vtt", "srclang": "en", "label": "English" }
+    ],
+    "transcript": "A silent graphite test pattern labeled PLACEHOLDER CLIP and NO ORIGINAL FOOTAGE. No original project footage has been supplied."
+  },
+  "previewVideo": {
+    "src": "/media/placeholder-landscape.mp4",
+    "type": "video/mp4",
+    "width": 1280,
+    "height": 800,
+    "orientation": "landscape",
+    "placeholder": true,
+    "hasAudio": false
+  },
+  "stills": [
+    {
+      "src": "/placeholders/landscape.svg",
+      "alt": "Labeled landscape still placeholder; approved project imagery has not been supplied.",
+      "width": 1600,
+      "height": 1000,
+      "orientation": "landscape",
+      "placeholder": true,
+      "caption": "Placeholder still — awaiting approved imagery."
+    }
+  ]
+}
