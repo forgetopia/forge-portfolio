@@ -1,0 +1,53 @@
+/* Still-frame viewing uses the existing cinematic palette and typography. */
+.still-gallery { padding-block: 46px 74px; border-top: 1px solid var(--line); }
+.still-gallery-note { max-width: 240px; color: var(--color-muted); font-size: 11px; }
+.still-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; align-items: start; }
+.still-frame { min-width: 0; margin: 0; }
+.still-frame-link { position: relative; display: block; aspect-ratio: var(--still-ratio); overflow: hidden; border: 1px solid var(--line); background: var(--color-graphite); }
+.still-frame-link img { width: 100%; height: 100%; object-fit: contain; }
+.still-frame figcaption { margin-top: 14px; color: var(--color-muted); font-size: 10px; line-height: 1.85; }
+.still-placeholder { position: absolute; right: 12px; bottom: 12px; padding: 4px 8px; background: var(--color-obsidian); color: var(--color-muted); font-size: 8px; line-height: 1.7; }
+.still-expand { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--line); background: var(--color-obsidian); color: var(--color-bronze); font-size: 19px; transition: background 180ms ease, color 180ms ease; }
+.still-frame-link:hover .still-expand, .still-frame-link:focus-visible .still-expand { background: var(--color-bronze); color: var(--color-obsidian); }
+
+.image-lightbox { position: fixed; inset: 0; width: 100%; max-width: none; height: 100vh; height: 100dvh; max-height: none; margin: 0; padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); border: 0; color: var(--color-ivory); background: var(--color-obsidian); overscroll-behavior: contain; }
+.image-lightbox[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 16px; }
+.image-lightbox::backdrop { background: var(--color-obsidian); }
+.image-lightbox [hidden] { display: none; }
+.lightbox-header { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.lightbox-header > .eyebrow { min-width: 0; overflow-wrap: anywhere; }
+.lightbox-control { display: grid; place-items: center; min-width: 48px; min-height: 48px; padding: 8px; border: 1px solid var(--line); background: var(--color-graphite); color: var(--color-ivory); font-family: var(--font-sans); font-size: 24px; line-height: 1; cursor: pointer; touch-action: manipulation; flex-shrink: 0; transition: background 180ms ease, color 180ms ease; }
+.lightbox-control:hover { background: var(--color-bronze); color: var(--color-obsidian); }
+.lightbox-control:disabled { opacity: .45; cursor: default; }
+.lightbox-close { font-size: 30px; }
+.lightbox-stage { display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; grid-template-rows: minmax(0, 1fr); align-items: center; gap: clamp(12px, 3vw, 48px); min-height: 0; }
+.lightbox-image-area { position: relative; display: grid; place-items: center; width: 100%; height: 100%; min-width: 0; min-height: 0; }
+/* Remove replaced-image intrinsic sizing from the grid so portrait media cannot enlarge its row. */
+.lightbox-image { position: absolute; inset: 0; width: 100%; height: 100%; max-height: 100%; object-fit: contain; }
+.lightbox-status { position: absolute; max-width: 320px; padding: 20px; color: var(--color-muted); font-size: 12px; text-align: center; }
+.lightbox-status:empty { display: none; }
+.lightbox-footer { display: flex; justify-content: space-between; align-items: start; gap: 24px; padding-top: 16px; border-top: 1px solid var(--line); }
+.lightbox-caption { max-width: 800px; color: var(--color-ivory); font-size: 12px; line-height: 1.8; }
+.lightbox-placeholder { display: inline-block; margin-top: 5px; color: var(--color-bronze); font-size: 9px; }
+.lightbox-count { flex-shrink: 0; color: var(--color-muted); font-size: 10px; line-height: 1.8; white-space: nowrap; }
+
+@media (max-width: 900px) {
+  .still-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+}
+
+@media (max-width: 640px) {
+  .still-gallery { padding-block: 34px 46px; }
+  .still-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .still-gallery-note { margin-top: 16px; font-size: 10px; }
+  .lightbox-header > .eyebrow { font-size: 8px; }
+  .lightbox-stage { grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 8px; }
+  .lightbox-control { min-width: 44px; min-height: 44px; }
+  .lightbox-footer { gap: 16px; }
+  .lightbox-caption { font-size: 10px; }
+  .lightbox-count { font-size: 9px; }
+  .lightbox-status { padding: 12px; font-size: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .still-expand, .lightbox-control { transition: none; }
+}

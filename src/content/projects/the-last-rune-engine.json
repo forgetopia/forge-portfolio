@@ -6,7 +6,10 @@
     "This sample entry demonstrates the project page structure for The Last Rune Engine. Original artwork and verified project information have not been supplied.",
     "AI Films and Fantasy Live-Action are demonstration categories for testing the gallery. No production, story, or credit details are asserted by this sample."
   ],
-  "categories": ["ai-films", "fantasy-live-action"],
+  "categories": [
+    "ai-films",
+    "fantasy-live-action"
+  ],
   "cover": {
     "src": "/placeholders/portrait.svg",
     "alt": "Clearly labeled portrait image placeholder; no artwork supplied for The Last Rune Engine.",
@@ -17,5 +20,74 @@
   },
   "featured": true,
   "order": 2,
-  "sample": true
+  "sample": true,
+  "synopsis": "Sample synopsis for The Last Rune Engine. This entry demonstrates the cinematic project viewer; an approved synopsis and original project media have not been supplied.",
+  "creativeDirection": [
+    "Sample creative-direction field. Approved visual references and production intent are awaiting confirmation.",
+    "The neutral test clip and labeled stills demonstrate media presentation only; they do not represent original project artwork or footage."
+  ],
+  "credits": [],
+  "video": {
+    "src": "/media/placeholder-portrait.mp4",
+    "type": "video/mp4",
+    "width": 640,
+    "height": 896,
+    "orientation": "portrait",
+    "placeholder": true,
+    "hasAudio": false,
+    "captions": [
+      {
+        "src": "/media/placeholder-en.vtt",
+        "srclang": "en",
+        "label": "English"
+      }
+    ],
+    "transcript": "A silent graphite test pattern labeled PLACEHOLDER CLIP and NO ORIGINAL FOOTAGE. A small bronze marker moves along the bottom. No original project footage has been supplied."
+  },
+  "previewVideo": {
+    "src": "/media/placeholder-portrait.mp4",
+    "type": "video/mp4",
+    "width": 640,
+    "height": 896,
+    "orientation": "portrait",
+    "placeholder": true,
+    "hasAudio": false,
+    "captions": [
+      {
+        "src": "/media/placeholder-en.vtt",
+        "srclang": "en",
+        "label": "English"
+      }
+    ],
+    "transcript": "A silent graphite test pattern labeled PLACEHOLDER CLIP and NO ORIGINAL FOOTAGE. A small bronze marker moves along the bottom. No original project footage has been supplied."
+  },
+  "stills": [
+    {
+      "src": "/placeholders/portrait.svg",
+      "alt": "Clearly labeled portrait placeholder for The Last Rune Engine, frame 01; no original still supplied.",
+      "width": 1000,
+      "height": 1400,
+      "orientation": "portrait",
+      "placeholder": true,
+      "caption": "Placeholder frame 01 — awaiting approved imagery."
+    },
+    {
+      "src": "/placeholders/landscape.svg",
+      "alt": "Clearly labeled landscape placeholder for The Last Rune Engine, frame 02; no original still supplied.",
+      "width": 1600,
+      "height": 1000,
+      "orientation": "landscape",
+      "placeholder": true,
+      "caption": "Placeholder frame 02 — awaiting approved imagery."
+    },
+    {
+      "src": "/placeholders/portrait.svg",
+      "alt": "Clearly labeled portrait placeholder for The Last Rune Engine, frame 03; no original still supplied.",
+      "width": 1000,
+      "height": 1400,
+      "orientation": "portrait",
+      "placeholder": true,
+      "caption": "Placeholder frame 03 — awaiting approved imagery."
+    }
+  ]
 }

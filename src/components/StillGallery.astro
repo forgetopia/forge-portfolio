@@ -1,0 +1,95 @@
+---
+import type { ImageData } from '../lib/project-schema';
+import '../styles/lightbox.css';
+
+interface Props {
+  images: ImageData[];
+  title: string;
+}
+
+const { images, title } = Astro.props;
+const galleryId = `stills-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+---
+
+{images.length > 0 && (
+  <section class="still-gallery" data-still-gallery aria-labelledby={`${galleryId}-heading`}>
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">A closer look</p>
+        <h2 id={`${galleryId}-heading`}>Still frames</h2>
+      </div>
+      <p class="still-gallery-note">Select a frame to view it in full.</p>
+    </div>
+    <div class="still-grid">
+      {images.map((image, index) => (
+        <figure class:list={['still-frame', `still-frame--${image.orientation}`]}>
+          <a
+            class="still-frame-link"
+            href={image.src}
+            data-lightbox-trigger
+            data-image-alt={image.alt}
+            data-image-width={image.width}
+            data-image-height={image.height}
+            data-image-caption={image.caption ?? image.alt}
+            data-image-placeholder={String(image.placeholder)}
+            aria-label={`Open still frame ${index + 1}: ${image.caption ?? image.alt}`}
+            style={`--still-ratio: ${image.width} / ${image.height};`}
+          >
+            <img
+              src={image.src}
+              alt={image.alt}
+              width={image.width}
+              height={image.height}
+              loading="lazy"
+              decoding="async"
+            />
+            {image.placeholder && <span class="still-placeholder">Placeholder image</span>}
+            <span class="still-expand" aria-hidden="true">↗</span>
+          </a>
+          <figcaption>{image.caption ?? image.alt}</figcaption>
+        </figure>
+      ))}
+    </div>
+
+    <dialog
+      class="image-lightbox"
+      data-image-lightbox
+      aria-modal="true"
+      aria-labelledby={`${galleryId}-viewer-heading`}
+      aria-describedby={`${galleryId}-caption`}
+    >
+      <div class="lightbox-header">
+        <h2 id={`${galleryId}-viewer-heading`} class="sr-only">Still frames — {title}</h2>
+        <p class="eyebrow" aria-hidden="true">{title} / Still frames</p>
+        <button type="button" class="lightbox-control lightbox-close" data-lightbox-close aria-label="Close image viewer">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="lightbox-stage">
+        <button type="button" class="lightbox-control" data-lightbox-prev aria-label="Previous image">
+          <span aria-hidden="true">←</span>
+        </button>
+        <div class="lightbox-image-area" data-lightbox-image-area>
+          <img class="lightbox-image" data-lightbox-image alt="" hidden />
+          <p class="lightbox-status" data-lightbox-status role="status" aria-live="polite" aria-atomic="true"></p>
+        </div>
+        <button type="button" class="lightbox-control" data-lightbox-next aria-label="Next image">
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
+      <div class="lightbox-footer">
+        <div>
+          <p id={`${galleryId}-caption`} class="lightbox-caption" data-lightbox-caption></p>
+          <span class="lightbox-placeholder" data-lightbox-placeholder hidden>Placeholder image</span>
+        </div>
+        <p class="lightbox-count" data-lightbox-count role="status" aria-live="polite" aria-atomic="true"></p>
+      </div>
+    </dialog>
+  </section>
+)}
+
+<script>
+  import { initImageLightboxes } from '../scripts/image-lightbox';
+
+  initImageLightboxes();
+</script>

@@ -3,15 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Arrow from '../components/Arrow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import CollectionNotice from '../components/CollectionNotice.astro';
+import HeroShowreel from '../components/HeroShowreel.astro';
 import { getFeaturedProjects, getProjects } from '../lib/projects';
 
 const featuredProjects = getFeaturedProjects(await getProjects());
 ---
 
 <BaseLayout>
-  <section class="hero" aria-labelledby="hero-heading">
-    <div class="hero-art" aria-hidden="true"><img src="/art/horizon.svg" alt="" width="1600" height="1100" fetchpriority="high" /></div>
-    <div class="hero-vignette" aria-hidden="true"></div>
+  <HeroShowreel>
     <div class="site-shell hero-inner">
       <p class="eyebrow hero-eyebrow"><span class="small-cross" aria-hidden="true">+</span>AI filmmaking & digital art</p>
       <h1 id="hero-heading">A universe<br />in the <em>making.</em></h1>
@@ -19,10 +18,10 @@ const featuredProjects = getFeaturedProjects(await getProjects());
       <a class="button-link" href="/work/">Explore the universe <Arrow direction="right" /></a>
       <div class="hero-bottom">
         <a class="scroll-link" href="#universe"><span aria-hidden="true">↓</span>Scroll to discover</a>
-        <p>001 / The beginning<span>Static visual study</span></p>
+        <p>001 / The beginning<span>Placeholder visual study</span></p>
       </div>
     </div>
-  </section>
+  </HeroShowreel>
   <section id="universe" class="site-shell introduction-section" aria-labelledby="intro-heading">
     <p class="eyebrow section-label">01 / The vision</p>
     <div class="introduction-copy">

@@ -20,6 +20,9 @@ const types = {
   '.ico': 'image/x-icon',
   '.woff': 'font/woff',
   '.woff2': 'font/woff2',
+  '.mp4': 'video/mp4',
+  '.webm': 'video/webm',
+  '.vtt': 'text/vtt; charset=utf-8',
 };
 
 const insideRoot = (path) => path === root || path.startsWith(`${root}${sep}`);
@@ -45,11 +48,32 @@ const server = createServer(async (request, response) => {
       return;
     }
     const body = await readFile(file);
-    response.writeHead(200, {
+    const headers = {
       'Content-Type': types[extname(file)] ?? 'application/octet-stream',
       'Content-Length': body.length,
       'Cache-Control': 'no-store',
-    });
+      'Accept-Ranges': 'bytes',
+    };
+    // Native media players use byte ranges to seek and avoid downloading a complete film.
+    const range = request.headers.range;
+    if (range) {
+      const match = /^bytes=(\d*)-(\d*)$/.exec(range);
+      let start;
+      let end;
+      if (match && (match[1] || match[2])) {
+        start = match[1] ? Number(match[1]) : Math.max(0, body.length - Number(match[2]));
+        end = match[1] && match[2] ? Math.min(Number(match[2]), body.length - 1) : body.length - 1;
+      }
+      if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 0 || start > end || start >= body.length) {
+        response.writeHead(416, { ...headers, 'Content-Range': `bytes */${body.length}`, 'Content-Length': 0 }).end();
+        return;
+      }
+      const chunk = body.subarray(start, end + 1);
+      response.writeHead(206, { ...headers, 'Content-Range': `bytes ${start}-${end}/${body.length}`, 'Content-Length': chunk.length });
+      response.end(request.method === 'HEAD' ? undefined : chunk);
+      return;
+    }
+    response.writeHead(200, headers);
     response.end(request.method === 'HEAD' ? undefined : body);
   } catch {
     response.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
