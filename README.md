@@ -9,7 +9,7 @@ A cinematic portfolio for AI filmmaking and digital art, built on a restrained d
 - Self-hosted Cormorant Garamond and Manrope fonts
 - An obsidian, graphite, ivory, and muted bronze design system
 
-The site renders static HTML to `dist/` and deploys as assets to the existing `forge-portfolio` Cloudflare Worker. Development and builds need no API keys, backend services, adapter, or runtime rendering. Deployment authentication is supplied by the connected Cloudflare build platform or an authenticated Wrangler session.
+The site renders static HTML to `dist/` and deploys as assets to the existing `forge-portfolio` Cloudflare Worker. The same source can produce a separate root-hosted GitHub Pages build. Development and builds need no API keys, backend services, adapter, or runtime rendering. Deployment authentication is supplied by the connected Cloudflare build platform or an authenticated Wrangler session.
 
 ## Local development
 
@@ -84,7 +84,7 @@ Routine updates belong in data files:
 
 The five existing demonstration records remain **The Long Night**, **The Last Rune Engine**, **Dragon Resonance**, **Isekai Live-Action**, and **Surreal Universe**. Their sample labels and media placeholders do not claim completed original work. Explicit drafts are excluded from public grids, featured selection, adjacent navigation, detail routes, and the sitemap. New non-sample records without a publication status also stay draft; legacy samples without a status remain visible for compatibility.
 
-`src/data/site.ts` holds the identity, About and Contact content, and verified production origin: `https://forge-portfolio.digivism9.workers.dev`. Personal identity, email, social profiles, services, capabilities, and availability remain unconfigured until approved details are supplied. `src/data/media.ts` trusts no external media origins by default; the production site origin does not automatically approve a CDN.
+`src/data/site.ts` holds the identity, About and Contact content. The build-time `FORGE_SITE_ORIGIN` setting selects the canonical origin, defaulting to the verified Cloudflare production origin: `https://forge-portfolio.digivism9.workers.dev`. Personal identity, email, social profiles, services, capabilities, and availability remain unconfigured until approved details are supplied. `src/data/media.ts` trusts no external media origins by default; selecting a site origin does not approve a CDN.
 
 Portfolio schema and queries live in `src/lib/project-schema.ts` and `src/lib/projects.ts`; records live in `src/content/projects/`. The collection validates metadata during sync/build. Invalid fields, duplicate slugs, and filename/slug mismatches fail validation.
 
@@ -96,13 +96,37 @@ Typography remains self-hosted. The current Latin subsets cover English content;
 
 The [final QA report](docs/final-qa-report.md) records the PR 06 environment, measured accessibility/performance results, hosted verification, and remaining media limitations. Use the [launch checklist](docs/launch-checklist.md), [deployment runbook](docs/deployment-runbook.md), and [content launch handoff](docs/content-launch-handoff.md) for release review and approved content replacement. Technical validation does not complete the missing creator identity, contact details, or original portfolio media.
 
-## Deployment compatibility
+## Dual-host deployments
+
+Build once for each destination. `FORGE_SITE_ORIGIN` is a public, build-time setting, not a secret or runtime variable. Without it, the build retains the existing Cloudflare canonical origin. Set it to `https://forgetopia.github.io` for the approved GitHub Pages user-site origin:
+
+| Destination | `FORGE_SITE_ORIGIN` | Canonical, Open Graph, sitemap, and absolute social image origin |
+| --- | --- | --- |
+| Existing Cloudflare Worker | Absent | `https://forge-portfolio.digivism9.workers.dev` |
+| GitHub Pages user site | `https://forgetopia.github.io` | `https://forgetopia.github.io` |
+
+```sh
+# Cloudflare: ensure no origin override is inherited from the shell or a local .env file.
+env -u FORGE_SITE_ORIGIN npm run build
+npx wrangler deploy --dry-run
+
+# GitHub Pages: generate a separate artifact with its own SEO URLs.
+FORGE_SITE_ORIGIN=https://forgetopia.github.io npm run build
+```
+
+Each build replaces `dist/`. Rebuild with the Cloudflare default before packaging or publishing to Workers; do not deploy the Pages artifact to Cloudflare or reuse a Cloudflare artifact on Pages. Changing an environment setting after building does not update generated HTML or the sitemap. An optional trailing slash is normalized; malformed URLs, HTTP, credentials, paths, queries, fragments, and empty overrides fail validation. Keep the override absent in the connected Cloudflare build; no change to its working configuration is needed.
+
+Routes and local assets remain root-relative, including `/work/`, `/images/`, `/media/`, and `/_astro/`. Keep hosting at `/` and do not set an Astro `/forge-portfolio/` base path. The `forgetopia/forge-portfolio` project repository alone would normally publish Pages under `/forge-portfolio/`, which is incompatible with this target. To serve `https://forgetopia.github.io/`, an authorized owner must publish the Pages build through the `forgetopia/forgetopia.github.io` user-site repository or another approved setup that serves that origin at its root. This change prepares the build; it does not create a repository, provision Pages, or deploy it.
+
+When publishing, upload the contents of `dist/` as a GitHub Actions Pages artifact and deploy that artifact. If using branch-based publishing instead, include a `.nojekyll` file at the published root so Jekyll does not omit the generated `/_astro/` assets. See the [deployment runbook](docs/deployment-runbook.md#github-pages-user-site) for separate-artifact validation and hosting checks. Neither host selection changes content, the direct-media allowlist, native media, or YouTube configuration.
+
+### Existing Cloudflare deployment
 
 Keep the connected Cloudflare Workers build using `npm run build` and `dist/`. `wrangler.jsonc` retains Worker name `forge-portfolio`, compatibility date `2026-10-06`, static assets directory `./dist`, and top-level `previews: {}`. Wrangler remains pinned to 4.149.0. An Astro adapter or Worker JavaScript entry point is unnecessary for the static site.
 
 After building, `npx wrangler deploy --dry-run` validates packaging without publishing. The existing GitHub integration deploys the branch preview and, after an authorized merge to `main`, production. Verify both checks against their actual commit. With Cloudflare authentication, `npx wrangler deploy` publishes production and `npx wrangler preview` creates a preview deployment; do not run a manual production deployment without explicit approval. Wrangler preview has no dry-run option. Astro's `npm run preview` starts a local server and does not deploy.
 
-The configured production origin supplies canonical URLs, social sharing URLs, and absolute sitemap locations. Update `site.productionOrigin` only to an owner-verified HTTPS origin after a domain change. Setting it to `null` omits origin-dependent metadata and produces an empty valid sitemap; do not guess a replacement hostname. No credentials or secrets belong in source control.
+The effective origin supplies canonical URLs, Open Graph URLs, absolute social image URLs for local covers, and sitemap locations. It stays on the Cloudflare production origin for branch previews unless explicitly overridden. Never use a guessed host or temporary preview origin. No credentials or secrets belong in source control.
 
 Cloudflare Pages remains an optional static target:
 

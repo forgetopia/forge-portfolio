@@ -1,4 +1,5 @@
 import { siteConfigSchema } from '../lib/site-schema';
+import { resolveSiteOrigin } from '../lib/site-origin';
 
 // Routine identity, About, and Contact updates belong here. Add only owner-approved details.
 export const site = siteConfigSchema.parse({
@@ -33,8 +34,8 @@ export const site = siteConfigSchema.parse({
   collaborationAvailability: 'unspecified',
   collaborationIntroduction: null,
   contactSubject: 'FORGE — Creative collaboration',
-  // Verified public production origin; update only when the owner changes the deployed domain.
-  productionOrigin: 'https://forge-portfolio.digivism9.workers.dev',
+  // SSG resolves this per build; direct Node tooling uses the same environment override.
+  productionOrigin: resolveSiteOrigin(import.meta.env?.FORGE_SITE_ORIGIN ?? process.env.FORGE_SITE_ORIGIN),
   about: {
     introductionHeading: 'Human imagination. New possibilities.',
     introductionDescription: 'FORGE is an independent visual universe. Built on curiosity. Shaped by imagination.',

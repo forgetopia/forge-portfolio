@@ -1,12 +1,12 @@
 # Deployment runbook
 
-FORGE uses the existing **Cloudflare Worker `forge-portfolio`**, connected to `forgetopia/forge-portfolio` through GitHub. `main` is the production branch. The verified production URL is **https://forge-portfolio.digivism9.workers.dev**.
+FORGE uses the existing **Cloudflare Worker `forge-portfolio`**, connected to `forgetopia/forge-portfolio` through GitHub. `main` is the production branch. The verified production URL is **https://forge-portfolio.digivism9.workers.dev**. The same source supports a separate GitHub Pages user-site build for the approved root origin **https://forgetopia.github.io**; Pages provisioning and publication are not configured by this change.
 
 The application is an Astro 7 static site. `npm run build` creates `dist/`; no Astro adapter, database, server rendering, or Worker JavaScript entry point is needed. Keep `wrangler.jsonc` unchanged: Worker name `forge-portfolio`, compatibility date `2026-10-06`, assets directory `./dist`, and `previews: {}`. Do not create another Worker or Cloudflare Pages project.
 
 ## Branch and pull request workflow
 
-1. Fetch the latest `main`, inspect `AGENTS.md`, and check for uncommitted user changes before starting a focused branch. PR 06 uses `pr06-final-qa-launch`.
+1. Fetch the latest `main`, inspect `AGENTS.md`, and check for uncommitted user changes before starting a focused branch.
 2. Make only reviewed code, documentation, or approved content changes. Do not commit `dist/`, caches, dependencies, credentials, private draft assets, or local configuration.
 3. Use the Node version pinned in `.node-version` and run the release validation sequence:
 
@@ -25,6 +25,52 @@ The application is an Astro 7 static site. `npm run build` creates `dist/`; no A
 5. Wait for GitHub CI and the connected Cloudflare Workers Preview build for the **latest head commit**, including any fixes pushed after an earlier successful run. A passing check on an older commit does not approve a newer one.
 6. Obtain repository/owner review. Do not automatically merge or manually publish production as part of QA.
 
+## Build for the intended host
+
+`FORGE_SITE_ORIGIN` is an optional build-time environment variable. It is public configuration, not a credential. An absent variable defaults to `https://forge-portfolio.digivism9.workers.dev`; use `https://forgetopia.github.io` for the separate GitHub Pages artifact. The override must be a safe HTTPS origin without credentials, a path, query, or fragment. A trailing slash is normalized. An empty override or an invalid URL fails validation instead of silently changing the canonical site.
+
+The selected origin is written into canonical URLs, Open Graph URLs, absolute social image URLs for local covers, and sitemap entries. It does not rewrite local media, routes, fonts, or generated asset paths. Both deployments require root hosting at `/`; do not add an Astro `/forge-portfolio/` base. Host selection does not modify content, the media CDN allowlist, or YouTube iframe trust.
+
+```sh
+# Ensure there is no local .env origin override, then build the Cloudflare artifact.
+env -u FORGE_SITE_ORIGIN npm run build
+npx wrangler deploy --dry-run
+
+# Build a separate artifact for the GitHub Pages user site.
+FORGE_SITE_ORIGIN=https://forgetopia.github.io npm run build
+```
+
+Every build replaces `dist/`. Archive or publish a reviewed artifact before building for the other host, and label artifacts with their origin and source commit. A runtime setting cannot correct SEO URLs in an already-generated artifact. Rebuild with the Cloudflare default before running any Workers publishing command after a Pages build. Keep `FORGE_SITE_ORIGIN` absent in the connected Cloudflare build; its default behavior and working deployment settings do not need to change.
+
+Run `npm run check`, `npm run test:unit`, `npm run build`, and `npm run test:e2e` as part of the normal validation. For host-specific changes, inspect both generated artifacts and run browser regressions against each with the matching origin setting, for example:
+
+```sh
+FORGE_SITE_ORIGIN=https://forgetopia.github.io npm run build
+FORGE_SITE_ORIGIN=https://forgetopia.github.io npm run test:e2e
+
+# Restore and verify the Cloudflare artifact before packaging.
+env -u FORGE_SITE_ORIGIN npm run build
+env -u FORGE_SITE_ORIGIN npm run test:e2e
+npx wrangler deploy --dry-run
+```
+
+Compare homepage and project canonical/Open Graph URLs, sitemap entries, and local social image URLs with the intended origin. Confirm only public projects are present. Inspect root-relative navigation and image/video/font/script requests, including a direct `/work/<slug>/` request.
+
+## GitHub Pages user site
+
+The approved URL is **https://forgetopia.github.io/**. Enabling ordinary project Pages for `forgetopia/forge-portfolio` would normally serve `/forge-portfolio/`, which does not match the required root URL. An authorized owner must publish the prepared `dist/` through the **`forgetopia/forgetopia.github.io` user-site repository** or another approved Pages configuration serving this exact root origin. Do not compensate by changing this site's base path. This preparation does not create that repository, select Pages settings, add a publishing workflow, or trigger a deployment.
+
+For an approved Pages release:
+
+1. Build the reviewed source commit with `FORGE_SITE_ORIGIN=https://forgetopia.github.io` and the pinned Node/npm dependencies. Retain the commit and build origin with the artifact.
+2. Publish the **contents of `dist/`** as the website root. With GitHub Actions Pages publishing, upload `dist/` using `actions/upload-pages-artifact` and deploy that artifact using the Pages deployment action in the authorized user-site repository. This serves the generated output directly without Jekyll processing.
+3. If branch-based publishing is selected instead, add an empty `.nojekyll` file to the published root alongside `index.html`. Jekyll can otherwise omit the generated `/_astro/` directory. Do not copy build output or add deployment credentials to this source repository.
+4. After deployment, verify `https://forgetopia.github.io/`, core routes, project deep links, `/sitemap.xml`, `/_astro/` CSS/JavaScript/fonts, posters, MP4/WebM and caption files. Test keyboard/touch navigation, filters, native playback, and the still-image lightbox. When an owner-approved YouTube film is configured, test click-to-load playback and its persistent watch fallback as well.
+5. Inspect HTML and sitemap SEO URLs for the GitHub Pages origin, and confirm no `/forge-portfolio/` prefix appears in routes or asset requests. Test unknown routes for a genuine `404`; Pages may provide its own error body rather than Cloudflare's current response.
+6. Smoke test the existing Cloudflare production site separately. The Pages publication must not change or replace the existing Worker, its integration, Wrangler configuration, or canonical origin in its own artifact.
+
+GitHub Pages has its own authenticated deployment and hosting behavior; a local build and Wrangler dry run do not verify a Pages deployment. Record hosted results only after the authorized Pages setup is actually published. Keep the two deployment artifacts and their rollback procedures separate; the existing Cloudflare process below remains in place.
+
 ## Verify the Workers Preview
 
 Open the Cloudflare Workers check attached to the pull request. Its details link identifies the branch preview build in the existing Worker service; use that generated preview address rather than guessing a hostname. Inspect both the build and deployment phases.
@@ -39,7 +85,7 @@ Check the preview for:
 - Local poster images, fonts, stills, video and caption files; appropriate response MIME types and video seeking/range behavior where supported.
 - Hero play/pause and mute, one eligible desktop hover preview at a time, touch/reduced-motion/data-saving posters, project playback, and lightbox keyboard/focus behavior.
 - Correct sample/placeholder labeling and absent unconfigured contact links.
-- Canonical/Open Graph/sitemap URLs that retain the verified **production** origin rather than the preview origin.
+- Canonical/Open Graph/absolute local social image/sitemap URLs that retain the verified **Cloudflare production** origin rather than the preview or GitHub Pages origin.
 
 Record the tested commit, check/build link, generated preview address, outcome, and any failures in the PR or [final QA report](final-qa-report.md). A successful packaging dry run is not proof that the authenticated preview deployed or that its pages function.
 

@@ -6,8 +6,9 @@ import { showreel } from '../../src/data/showreel';
 import { projectSchema } from '../../src/lib/project-schema';
 import { filterPublicProjects } from '../../src/lib/project-utils';
 import { buildMailtoLink } from '../../src/lib/site-schema';
+import { resolveSiteOrigin } from '../../src/lib/site-origin';
 
-const productionOrigin = 'https://forge-portfolio.digivism9.workers.dev';
+const productionOrigin = resolveSiteOrigin(process.env.FORGE_SITE_ORIGIN);
 const projects = filterPublicProjects(readdirSync(resolve('src/content/projects'))
   .filter((filename) => filename.endsWith('.json'))
   .map((filename) => ({ data: projectSchema.parse(JSON.parse(readFileSync(resolve('src/content/projects', filename), 'utf8'))) })))

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { site } from '../../src/data/site';
+import { resolveSiteOrigin } from '../../src/lib/site-origin';
 import {
   buildMailtoLink,
   collaborationAvailabilityLabel,
@@ -17,7 +18,7 @@ test('the public brand has no fabricated personal identity, services, contacts, 
   assert.deepEqual(site.creativeServices, []);
   assert.deepEqual(site.capabilities, []);
   assert.equal(site.collaborationAvailability, 'unspecified');
-  assert.equal(site.productionOrigin, 'https://forge-portfolio.digivism9.workers.dev');
+  assert.equal(site.productionOrigin, resolveSiteOrigin(process.env.FORGE_SITE_ORIGIN));
   assert.match(site.about.workflowIntroduction, /typical|outline/i);
   assert.match(site.about.workflowIntroduction, /not a record/i);
   assert.equal(site.about.productionWorkflow.length, 4);

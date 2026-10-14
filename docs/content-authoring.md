@@ -78,13 +78,15 @@ Edit `src/data/site.ts`; its schema is in `src/lib/site-schema.ts`. Optional per
 | `socialLinks` | `{ label, url }` entries for approved public HTTPS profiles without embedded credentials |
 | `collaborationIntroduction` | Optional collaboration copy |
 | `collaborationAvailability` | `unspecified`, `open`, `limited`, or `unavailable`; leave unspecified until confirmed |
-| `productionOrigin` | Verified HTTPS origin for canonical/social URLs and the sitemap, without a path, query, or fragment |
+| `productionOrigin` | Effective build origin for canonical/social URLs and the sitemap, selected by `FORGE_SITE_ORIGIN`; configure hosting as described below rather than editing project content |
 
 Unconfigured email and social links remain absent; Contact displays a useful fallback. Services and capabilities start empty rather than advertising unverified skills. Validation checks field structure and safe URLs; it cannot verify a person's identity or experience.
 
 The `about` object edits the page's editorial content: `introductionHeading`, `introductionDescription`, `philosophyHeading`, `philosophyParagraphs`, `principles`, `workflowIntroduction`, `productionWorkflow`, `capabilitiesIntroduction`, `collaborationHeading`, and `collaborationDescription`. Principles and workflow steps use `{ title, description }` entries. Keep required paragraphs and steps nonempty. Describe AI-assisted stages accurately and distinguish an approach from completed production history.
 
-The owner-confirmed production origin is currently `https://forge-portfolio.digivism9.workers.dev`. Keep it pointed at the production site, not a branch preview. If changing domains, verify the replacement with the owner and inspect canonical, Open Graph, and sitemap URLs after building. Setting it to `null` intentionally omits origin-based metadata and produces an empty valid sitemap.
+The default owner-confirmed production origin remains `https://forge-portfolio.digivism9.workers.dev`. For a separate GitHub Pages user-site build, set `FORGE_SITE_ORIGIN=https://forgetopia.github.io` when running `npm run build`. This public setting changes canonical URLs, Open Graph URLs, absolute local social image URLs, and sitemap locations without changing project metadata or asset paths. It must be an HTTPS origin without credentials, a path, query, or fragment; a trailing slash is normalized and an empty override is rejected. Never use a branch preview address.
+
+Each destination needs its own generated `dist/`; rebuilding replaces the previous artifact. Keep the variable absent for Cloudflare and rebuild before Workers packaging/deployment if you last built for Pages. Both targets serve root-relative assets and routes at `/`, with no `/forge-portfolio/` base. This repository does not provision GitHub Pages; publishing the approved user-site origin requires the correct user-site repository or another approved root-hosting setup. See [Dual-host deployments](../README.md#dual-host-deployments) and the [deployment runbook](deployment-runbook.md#github-pages-user-site). The direct-media CDN allowlist remains separate and empty; selecting a site origin does not approve an external media host.
 
 ## Review, test, and deploy
 
