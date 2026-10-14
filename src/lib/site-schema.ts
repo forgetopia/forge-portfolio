@@ -1,5 +1,6 @@
 import { z } from 'astro/zod';
 import { imageMediaSchema } from './project-schema';
+import { isSafeSiteOrigin } from './site-origin';
 
 const text = z.string().trim().min(1);
 const optionalText = text.nullable().default(null);
@@ -18,13 +19,9 @@ export const socialLinkSchema = z.object({
   }),
 }).strict();
 
-export const productionOriginSchema = z.string().trim().pipe(z.url()).superRefine((value, context) => {
-  let url: URL;
-  try { url = new URL(value); } catch { return; }
-  if (url.protocol !== 'https:' || url.username || url.password || url.pathname !== '/' || url.search || url.hash) {
-    context.addIssue({ code: 'custom', message: 'Use the verified HTTPS production origin without a path, query, or credentials.' });
-  }
-});
+export const productionOriginSchema = z.string().refine(isSafeSiteOrigin, {
+  message: 'Use the verified HTTPS production origin without credentials, a path, query, fragment, whitespace, or backslashes.',
+}).transform((value) => new URL(value).origin);
 
 export const collaborationAvailabilityValues = ['unspecified', 'open', 'limited', 'unavailable'] as const;
 export type CollaborationAvailability = (typeof collaborationAvailabilityValues)[number];

@@ -10,6 +10,9 @@ const run = promisify(execFile);
 const repository = resolve('.');
 const astroCLI = resolve('node_modules/astro/bin/astro.mjs');
 const productionOrigin = 'https://forge-portfolio.digivism9.workers.dev';
+// These publication fixtures deliberately exercise the default Cloudflare origin.
+const fixtureEnvironment: NodeJS.ProcessEnv = { ...process.env, ASTRO_TELEMETRY_DISABLED: '1', NO_COLOR: '1' };
+delete fixtureEnvironment.FORGE_SITE_ORIGIN;
 
 /** Build the actual collection and pages in a disposable copy, never changing owner content. */
 async function withBuiltFixture(
@@ -42,7 +45,7 @@ async function withBuiltFixture(
     try {
       const result = await run(process.execPath, [astroCLI, 'build'], {
         cwd: directory,
-        env: { ...process.env, ASTRO_TELEMETRY_DISABLED: '1', NO_COLOR: '1' },
+        env: fixtureEnvironment,
         timeout: 60_000,
         maxBuffer: 1024 * 1024,
       });
