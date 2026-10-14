@@ -23,11 +23,19 @@ The template uses actual committed, labeled placeholders. It lives outside the c
 | `overview`, `synopsis` | Optional nonempty editorial text |
 | `creativeDirection`, `productionWorkflow` | Arrays of nonempty paragraphs describing the actual creative intent and process |
 | `credits` | Verified `{ "role": "…", "name": "…" }` entries; use `[]` until supplied |
-| `cover`, `stills`, `video`, `previewVideo` | Media metadata documented in [Media integration](media-integration.md) |
+| `cover`, `stills`, `video`, `youtube`, `previewVideo` | Media metadata documented in [Media integration](media-integration.md); configure `video` or `youtube` as the main film, never both |
 | `featured`, `order` | Homepage selection and ascending nonnegative integer ordering; defaults are `false` and `0` |
 | `sample`, `status` | Demonstration labeling and publication control, described below |
 
 Projects with equal `order` sort by slug. `featured: true` includes only public projects on the homepage. No route file per project is needed.
+
+### Choose a main film
+
+Keep `video` for an approved direct MP4/WebM film, or remove that field and add `youtube` for an owner-approved YouTube upload. The `youtube` object requires `videoId` (exactly 11 ASCII letters, digits, `_`, or `-`) and `orientation` (`landscape` or `portrait`); optional `startSeconds` must be a nonnegative safe integer. Supply the ID alone, not a watch URL, embed URL, channel URL, or Shorts URL. See [YouTube main films](media-integration.md#youtube-main-films) for the metadata example and player behavior.
+
+Supplying both `video` and `youtube` fails validation. Omit both for image-only work. `previewVideo` remains an independent native short clip: retain it when switching the main film to YouTube, provided the clip is approved and suitable for hover. The existing cover becomes the YouTube poster, so review its artwork, alternative text, placeholder label, and fit at the selected video ratio. Choosing YouTube does not change the cover, credits, still gallery, project navigation, or homepage hero.
+
+No real YouTube IDs have been supplied. Keep current project records and the reusable native template unchanged until the owner approves an upload. A structurally valid ID does not establish ownership, public availability, embeddability, or caption quality. Review the actual upload, rights, captions/transcript, playback restrictions, keyboard controls, and mobile layout before publishing.
 
 Choose one or more unique category IDs:
 
@@ -101,4 +109,4 @@ Commit focused data and approved asset changes on a separate branch and open a p
 - Actual capabilities and services, collaboration introduction and availability, verified public email, and approved social profiles.
 - For each real project: approved title/copy, categories, year/format/duration/ratio, tools, role, workflow, verified credits, and publication decision.
 - Approved cover, showreel/poster, main film, separate short muted preview, stills, accurate dimensions, alt text, captions, and transcripts.
-- Exact approved CDN origins and direct asset URLs if using remote media; no external media host is currently trusted.
+- Exact approved CDN origins and direct asset URLs if using remote media; no external media host is currently trusted. For YouTube films, an approved video ID, orientation, optional start position, and review of public embedding and accessibility are needed separately.

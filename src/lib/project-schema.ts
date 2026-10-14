@@ -1,6 +1,7 @@
 import { z } from 'astro/zod';
 import { mediaPolicy } from '../data/media';
 import { createMediaPolicy, isAllowedMediaSource, mediaSourcePathname, type MediaPolicy } from './media-policy';
+import { isYouTubeStartSeconds, isYouTubeVideoId } from './youtube';
 
 export const projectCategories = [
   { id: 'ai-films', label: 'AI Films' },
@@ -117,6 +118,21 @@ export const videoMediaSchema = createVideoMediaSchema();
 
 export type VideoData = z.infer<typeof videoMediaSchema>;
 
+/** YouTube identifiers never enter the direct MP4/WebM source schema or host allowlist. */
+export const youtubeMediaSchema = z.object({
+  videoId: z.string().refine(
+    isYouTubeVideoId,
+    'Use an 11-character YouTube video ID containing only letters, numbers, underscores, or hyphens.',
+  ),
+  startSeconds: z.number().refine(
+    isYouTubeStartSeconds,
+    'YouTube startSeconds must be a nonnegative safe integer.',
+  ).optional(),
+  orientation: z.enum(['landscape', 'portrait']),
+}).strict();
+
+export type YouTubeData = z.infer<typeof youtubeMediaSchema>;
+
 /** Portfolio metadata is validated during Astro sync and every production build. */
 export function createProjectSchema(policy: MediaPolicy = mediaPolicy) {
   const images = createImageMediaSchema(policy);
@@ -145,6 +161,7 @@ export function createProjectSchema(policy: MediaPolicy = mediaPolicy) {
       ),
       cover: images,
       video: videos.optional(),
+      youtube: youtubeMediaSchema.optional(),
       previewVideo: videos.optional(),
       synopsis: nonemptyText.optional(),
       creativeDirection: z.array(nonemptyText).default([]),
@@ -156,7 +173,16 @@ export function createProjectSchema(policy: MediaPolicy = mediaPolicy) {
       // Omission preserves legacy samples; other new records remain private until published.
       status: z.enum(['draft', 'published']).optional(),
     })
-    .strict();
+    .strict()
+    .superRefine((project, context) => {
+      if (project.video && project.youtube) {
+        context.addIssue({
+          code: 'custom',
+          path: ['youtube'],
+          message: 'Choose one main film: either native video or YouTube, never both. Preview video remains independent.',
+        });
+      }
+    });
 }
 
 export const projectSchema = createProjectSchema();

@@ -1,6 +1,6 @@
 # FORGE — Visual Universe
 
-A cinematic portfolio for AI filmmaking and digital art, built on a restrained dark design system. Editable data drives the creative identity, collaboration page, responsive gallery, and project viewers with video, stills, and a fullscreen image lightbox.
+A cinematic portfolio for AI filmmaking and digital art, built on a restrained dark design system. Editable data drives the creative identity, collaboration page, responsive gallery, and project viewers with native or click-to-load YouTube films, stills, and a fullscreen image lightbox.
 
 ## Stack
 
@@ -79,7 +79,7 @@ The executable override applies only to Chromium. Report unsupported engines as 
 Routine updates belong in data files:
 
 - [Content authoring guide](docs/content-authoring.md): projects, publication, identity, About, Contact, and review checklist.
-- [Media integration guide](docs/media-integration.md): local assets, approved CDN origins, films, previews, showreel, accessibility, and playback requirements.
+- [Media integration guide](docs/media-integration.md): native and YouTube films, local assets, approved CDN origins, previews, showreel, accessibility, and playback requirements.
 - [Reusable draft project template](docs/templates/project.json): copy into the collection and edit before publishing.
 
 The five existing demonstration records remain **The Long Night**, **The Last Rune Engine**, **Dragon Resonance**, **Isekai Live-Action**, and **Surreal Universe**. Their sample labels and media placeholders do not claim completed original work. Explicit drafts are excluded from public grids, featured selection, adjacent navigation, detail routes, and the sitemap. New non-sample records without a publication status also stay draft; legacy samples without a status remain visible for compatibility.
@@ -87,6 +87,8 @@ The five existing demonstration records remain **The Long Night**, **The Last Ru
 `src/data/site.ts` holds the identity, About and Contact content, and verified production origin: `https://forge-portfolio.digivism9.workers.dev`. Personal identity, email, social profiles, services, capabilities, and availability remain unconfigured until approved details are supplied. `src/data/media.ts` trusts no external media origins by default; the production site origin does not automatically approve a CDN.
 
 Portfolio schema and queries live in `src/lib/project-schema.ts` and `src/lib/projects.ts`; records live in `src/content/projects/`. The collection validates metadata during sync/build. Invalid fields, duplicate slugs, and filename/slug mismatches fail validation.
+
+Each project may supply one main film: native MP4/WebM `video` metadata or a `youtube` object containing an owner-supplied 11-character `videoId`, `orientation`, and optional nonnegative integer `startSeconds`. Supplying both is rejected; omitting both keeps an image-only project. YouTube films show the existing cover until Play is activated, then load the privacy-enhanced `www.youtube-nocookie.com` player with standard controls. A normal watch link remains available. No real YouTube IDs are configured yet. YouTube iframe trust is separate from the still-empty direct-media CDN allowlist; native hover previews and the homepage hero remain unchanged. See [YouTube main films](docs/media-integration.md#youtube-main-films) for authoring and playback limitations.
 
 Typography remains self-hosted. The current Latin subsets cover English content; add the matching subsets and Unicode ranges before publishing other scripts and check glyph coverage. Preserve the existing font families and visual tokens. The historical [PR 04 QA report](docs/pr04-qa.md) records the responsive, accessibility, and performance baseline and its limitations.
 

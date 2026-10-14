@@ -3,7 +3,7 @@ import { readFile, realpath, stat } from 'node:fs/promises';
 import { resolve, sep, extname } from 'node:path';
 
 // Serve the built site directly: these tests exercise the same static files deployed to Cloudflare.
-const root = await realpath(resolve('dist'));
+const root = await realpath(resolve(process.env.PORTFOLIO_TEST_ROOT ?? 'dist'));
 const port = Number(process.env.PORTFOLIO_TEST_PORT ?? 4173);
 const types = {
   '.html': 'text/html; charset=utf-8',
@@ -83,7 +83,8 @@ const server = createServer(async (request, response) => {
 });
 
 server.listen(port, '127.0.0.1', () => {
-  console.log(`Production portfolio test server: http://127.0.0.1:${port}`);
+  const address = server.address();
+  console.log(`Production portfolio test server: http://127.0.0.1:${typeof address === 'object' && address ? address.port : port}`);
 });
 
 for (const signal of ['SIGINT', 'SIGTERM']) {
