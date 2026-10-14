@@ -1,6 +1,6 @@
 # PR 06 — Production-build performance evidence
 
-Audit date: 2026-10-13 UTC. Audited the final PR 06 production build, based on merged PR 05 (`65019a0`), after the inset native-player focus-ring fix. This is a local laboratory audit of the generated static site, not a live Cloudflare or real-user performance measurement.
+Initial audit date: 2026-10-13 UTC. Audited the PR 06 implementation build, based on merged PR 05 (`65019a0`), after the inset native-player focus-ring fix and before the final QA documentation. The tables below preserve those 36 runs. Two bounded checks of the later documentation build are recorded separately below. These are local laboratory audits of the generated static site, not live Cloudflare or real-user performance measurements.
 
 ## Environment and method
 
@@ -43,10 +43,23 @@ The following transfer totals are from each route's first mobile run; repeated r
 
 - Initial navigation fetched **zero MP4s**, zero external JavaScript resources, and zero third-party resources on every audit. Existing HTML includes executable inline modules; zero script requests does not mean zero JavaScript.
 - Inline JavaScript source in built HTML is 6,975 bytes on Home, 4,699 on Work, 7,552 on each representative project detail, and 1,300 on About/Contact. These bytes are already part of the document transfer totals above.
-- The build emits three CSS files totaling 41,400 bytes and five font files totaling 135,240 bytes. Emitted files are not all fetched on each page: actual font transfers were two requests / 48,110 bytes on About and three requests / 71,969 bytes elsewhere. Cormorant Garamond and Manrope remain self-hosted; fonts use `font-display: swap`, with the normal display face preloaded.
+- The implementation build used for the 36 runs emitted three CSS files totaling 41,400 bytes and five font files totaling 135,240 bytes. Emitted files are not all fetched on each page: actual font transfers were two requests / 48,110 bytes on About and three requests / 71,969 bytes elsewhere. Cormorant Garamond and Manrope remain self-hosted; fonts use `font-display: swap`, with the normal display face preloaded.
 - Hero and detail cover images retain `fetchpriority="high"`, intrinsic dimensions, and reserved aspect ratios. Card, still-gallery, and noncritical editorial images are lazy loaded. Current placeholders are small scalable SVGs; no raster source variants are available. Approved future raster assets still need appropriate export sizes and loading validation.
 - Hero autoplay remains explicitly disabled. Hero, project film, and card preview video elements use `preload="none"`; card sources are assigned only for eligible pointer interactions. Captions can load independently of the film. The existing two labeled placeholder clips total only 36,709 bytes, so these results cannot predict real-film transfer costs.
 - Poster/video/image frames preserve aspect ratios and reserve layout space. The largest observed CLS was the mobile homepage's 0.04642, within the target. No measured performance defect required changing the existing design or adding an optimization dependency.
+
+## Final documentation-build spot checks
+
+On 2026-10-14 UTC, the build including the new QA and launch documents emitted three CSS files totaling **41,490 bytes**, 90 bytes above the implementation build. Tailwind's automatic source detection picked up additional unused utility tokens from the documentation; the application stylesheet source had no further change after the native-player focus fix. The earlier median and transfer tables describe their original build rather than silently substituting the later payload.
+
+Exactly one additional cold-navigation run per device mode checked `/work/surreal-universe/`, which has both a portrait cover and a portrait main film, against that later `dist/` on isolated local port 4290. Lighthouse/browser versions, throttling, screen emulation, flags, and test-server behavior matched the settings above. These are **individual results, not medians**, and do not replace the earlier six-route medians.
+
+| Route | Mode | Performance | Accessibility | LCP | CLS | TBT |
+| --- | --- | --- | --- | --- | --- | --- |
+| `/work/surreal-universe/` | Mobile | 99 | 100 | 2.036s | 0.00010 | 0ms |
+| `/work/surreal-universe/` | Desktop | 100 | 100 | 0.450s | 0.00009 | 0ms |
+
+Both runs met the targets, with no runtime errors, run warnings, failed requests, or failed scored accessibility audits. Each transferred 138,974 bytes in 11 requests, including three CSS requests / 42,125 bytes and three font requests / 71,969 bytes. Neither fetched video, external JavaScript, or third-party resources. INP remains unmeasured. Raw reports are `final-mobile-surreal.json` and `final-desktop-surreal.json` in the temporary evidence directory below.
 
 ## Reproducing the audit
 

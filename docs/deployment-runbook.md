@@ -43,6 +43,8 @@ Check the preview for:
 
 Record the tested commit, check/build link, generated preview address, outcome, and any failures in the PR or [final QA report](final-qa-report.md). A successful packaging dry run is not proof that the authenticated preview deployed or that its pages function.
 
+The PR 06 production follow-up confirms the current MP4s return full `200` bodies to Range requests. Small placeholder playback/seek works in Chromium; do not record `206` partial delivery as passed. Validate suitable range delivery before publishing larger films, using approved hosting and the existing secure media policy. Default missing routes return a genuine `404` with an empty body; a branded recovery page would need a separate reviewed asset-handling configuration change.
+
 ## Merge and automatic production deployment
 
 An authorized reviewer may merge only after the current commit passes required checks and documented limitations are accepted. An approved merge to `main` lets the **existing GitHub integration** build and deploy production automatically; do not run a separate manual production command.

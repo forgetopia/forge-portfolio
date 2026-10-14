@@ -92,7 +92,7 @@ Typography remains self-hosted. The current Latin subsets cover English content;
 
 ## Release review
 
-The [final QA report](docs/final-qa-report.md) records the PR 06 environment, measured accessibility/performance results, and hosted checks that still need verification. Use the [launch checklist](docs/launch-checklist.md), [deployment runbook](docs/deployment-runbook.md), and [content launch handoff](docs/content-launch-handoff.md) for release review and approved content replacement. Technical validation does not complete the missing creator identity, contact details, or original portfolio media.
+The [final QA report](docs/final-qa-report.md) records the PR 06 environment, measured accessibility/performance results, hosted verification, and remaining media limitations. Use the [launch checklist](docs/launch-checklist.md), [deployment runbook](docs/deployment-runbook.md), and [content launch handoff](docs/content-launch-handoff.md) for release review and approved content replacement. Technical validation does not complete the missing creator identity, contact details, or original portfolio media.
 
 ## Deployment compatibility
 

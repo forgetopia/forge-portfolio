@@ -8,7 +8,7 @@ Use the [final QA report](final-qa-report.md) for measured results, browser cove
 
 ## Technical release readiness
 
-**Local repository gates: PASS. Hosted release verification: BLOCKED.** Direct production HTTPS access is denied by this environment proxy. Current-head CI/Workers Preview results belong in the pull request checks; complete the generated preview smoke test before marking the full technical release gate passed.
+**Technical readiness: PASS for the current placeholder site.** Local checks, production smoke, and all 70 applicable hosted-preview application browser tests pass. Current-head CI/Workers Preview results belong in the pull request checks; require them to remain green before owner-approved merge. The observed Range limitation keeps larger-film delivery readiness incomplete.
 
 - [x] Existing architecture remains Astro 7 static output, strict TypeScript, and Tailwind CSS 4.
 - [x] The verified production origin is configured in `src/data/site.ts`; no preview hostname is configured as canonical.
@@ -54,6 +54,7 @@ An intentionally omitted contact method is valid technically. It remains an outs
 - [ ] Audio metadata is accurate, caption tracks are synchronized, and meaningful transcripts/visual descriptions are reviewed.
 - [ ] Image alt text and still captions describe the supplied assets; portrait/landscape aspect ratios remain intact.
 - [ ] Actual media startup, seeking, captions, error recovery, and mobile transfer cost are tested after replacement.
+- [ ] Suitable partial video delivery is verified before larger films are published. Current production MP4s return full `200` responses to Range requests; the small placeholder clips play/seek in Chromium, but this does not establish large-film delivery readiness.
 - [x] No CDN provider or external media URL is assumed. The allowlist stays empty until approval.
 - [ ] If remote media is chosen, owner approves the exact HTTPS origins and direct asset URLs; MIME types, anonymous CORS, and video byte-range responses are verified.
 
@@ -67,9 +68,9 @@ An intentionally omitted contact method is valid technically. It remains an outs
 
 ## Deployment verification and release gate
 
-- [ ] GitHub CI succeeds for the latest PR 06 commit.
-- [ ] The existing Cloudflare Workers Preview build succeeds for that same commit; inspect its build/deploy log and generated preview.
-- [ ] Preview smoke tests pass for core routes, project deep links, assets, interactive media, missing routes, and production-origin metadata.
+- [x] Implementation commit `0b0bcf3` passed GitHub CI. Require the latest head to remain green in [PR #6 checks](https://github.com/forgetopia/forge-portfolio/pull/6/checks), including documentation updates.
+- [x] The same implementation commit passed the existing Workers Preview build/deployment. Require the latest head's check to remain green; its generated preview HTTP smoke is separate below.
+- [x] Actual generated-preview HTTP checks and all 70 applicable application browser regressions pass, including the new focus ring, routes/media, accessibility, responsive behavior, and production-origin metadata. The local fixture-server Range-handler test remains passing in the full local/CI suite; real Workers Range limitations are recorded separately.
 - [ ] Reviewer inspects the final diff and QA limitations; the repository, production branch, integration, credentials, DNS, and domains are unchanged.
 - [ ] Owner/reviewer chooses whether to merge the technical update while content remains incomplete.
 - [ ] After an authorized merge to `main`, the existing automatic production build is verified against the merged commit and the live HTTPS site is smoke tested.
