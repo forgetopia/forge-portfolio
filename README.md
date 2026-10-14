@@ -90,11 +90,15 @@ Portfolio schema and queries live in `src/lib/project-schema.ts` and `src/lib/pr
 
 Typography remains self-hosted. The current Latin subsets cover English content; add the matching subsets and Unicode ranges before publishing other scripts and check glyph coverage. Preserve the existing font families and visual tokens. The historical [PR 04 QA report](docs/pr04-qa.md) records the responsive, accessibility, and performance baseline and its limitations.
 
+## Release review
+
+The [final QA report](docs/final-qa-report.md) records the PR 06 environment, measured accessibility/performance results, and hosted checks that still need verification. Use the [launch checklist](docs/launch-checklist.md), [deployment runbook](docs/deployment-runbook.md), and [content launch handoff](docs/content-launch-handoff.md) for release review and approved content replacement. Technical validation does not complete the missing creator identity, contact details, or original portfolio media.
+
 ## Deployment compatibility
 
 Keep the connected Cloudflare Workers build using `npm run build` and `dist/`. `wrangler.jsonc` retains Worker name `forge-portfolio`, compatibility date `2026-10-06`, static assets directory `./dist`, and top-level `previews: {}`. Wrangler remains pinned to 4.149.0. An Astro adapter or Worker JavaScript entry point is unnecessary for the static site.
 
-After building, `npx wrangler deploy --dry-run` validates packaging without publishing. With Cloudflare authentication, `npx wrangler deploy` publishes production and `npx wrangler preview` creates a preview deployment. Wrangler preview has no dry-run option. Astro's `npm run preview` starts a local server and does not deploy.
+After building, `npx wrangler deploy --dry-run` validates packaging without publishing. The existing GitHub integration deploys the branch preview and, after an authorized merge to `main`, production. Verify both checks against their actual commit. With Cloudflare authentication, `npx wrangler deploy` publishes production and `npx wrangler preview` creates a preview deployment; do not run a manual production deployment without explicit approval. Wrangler preview has no dry-run option. Astro's `npm run preview` starts a local server and does not deploy.
 
 The configured production origin supplies canonical URLs, social sharing URLs, and absolute sitemap locations. Update `site.productionOrigin` only to an owner-verified HTTPS origin after a domain change. Setting it to `null` omits origin-dependent metadata and produces an empty valid sitemap; do not guess a replacement hostname. No credentials or secrets belong in source control.
 
