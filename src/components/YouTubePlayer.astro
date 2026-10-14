@@ -1,0 +1,60 @@
+---
+import type { ImageData } from '../lib/project-schema';
+import { buildYouTubeWatchURL, type YouTubeVideo } from '../lib/youtube';
+import '../styles/project-media.css';
+import '../styles/youtube-player.css';
+
+interface Props {
+  youtube: YouTubeVideo;
+  poster: ImageData;
+  title: string;
+}
+
+const { youtube, poster, title } = Astro.props;
+const watchURL = buildYouTubeWatchURL(youtube);
+---
+
+<section class="project-film-section" aria-labelledby="project-film-heading">
+  <div class="section-heading">
+    <div><p class="eyebrow">Motion & narrative</p><h2 id="project-film-heading">The <em>film.</em></h2></div>
+    <span class="media-kind-label">YouTube film</span>
+  </div>
+  <figure
+    class:list={['youtube-player', `youtube-player--${youtube.orientation}`]}
+    data-youtube-player
+    data-youtube-state="idle"
+    data-youtube-video-id={youtube.videoId}
+    data-youtube-start-seconds={youtube.startSeconds}
+    data-youtube-orientation={youtube.orientation}
+    data-youtube-title={title}
+  >
+    <div class="youtube-player-frame" data-youtube-frame>
+      <img class="youtube-player-poster" data-youtube-poster src={poster.src} alt={poster.alt} width={poster.width} height={poster.height} loading="lazy" />
+      <div class="youtube-player-overlay" data-youtube-overlay hidden>
+        <button type="button" class="film-play-button" data-youtube-start aria-label={`Play film: ${title}`} aria-describedby="project-film-note">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7Z" fill="currentColor" /></svg>
+          <span data-youtube-action>Play film</span>
+        </button>
+      </div>
+    </div>
+    <figcaption id="project-film-note">
+      {poster.placeholder && <span>Placeholder poster. Original poster has not been supplied. </span>}
+      YouTube loads only after you choose Play film. Use its standard controls for playback and captions.
+    </figcaption>
+    <div class="youtube-player-feedback">
+      <p data-youtube-status role="status" aria-live="polite" aria-atomic="true"></p>
+      <button type="button" class="text-link" data-youtube-retry hidden>Retry YouTube film <span aria-hidden="true">↻</span></button>
+    </div>
+    <a class="text-link youtube-player-watch" data-youtube-watch href={watchURL} target="_blank" rel="noopener noreferrer" aria-label={`Watch on YouTube: ${title} (opens in a new tab)`}>
+      Watch on YouTube <span aria-hidden="true">↗</span>
+    </a>
+    <p class="youtube-player-fallback">If embedding is restricted or the film is unavailable here, use the watch link.</p>
+    <noscript><p class="media-noscript">JavaScript is needed for embedded playback. You can use the YouTube watch link instead.</p></noscript>
+  </figure>
+</section>
+
+<script>
+  import { initYouTubePlayers } from '../scripts/youtube-player';
+
+  initYouTubePlayers();
+</script>
